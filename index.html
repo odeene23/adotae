@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/cadastro.css">
+  <link rel="stylesheet" href="cadastro.css">
 </head>
 <body id="topo">
 
@@ -246,7 +246,7 @@
     <form id="cadastroForm" class="form" data-panel="cadastro" hidden novalidate>
       <fieldset class="grupo">
         <legend>Dados pessoais</legend>
-        <label class="field"><span>Nome completo *</span><input type="text" name="nome" required minlength="3" maxlength="60" autocomplete="name"></label>
+        <label class="field"><span>Nome completo *</span><input type="text" name="nome" required minlength="15" maxlength="60" pattern="[A-Za-zÀ-ÖØ-öø-ÿ ]{15,60}" title="Digite seu nome completo usando apenas letras e espaços (15 a 60 caracteres)." autocomplete="name"></label>
         <label class="field"><span>Nome materno *</span><input type="text" name="materno" required minlength="3" maxlength="60" autocomplete="off"></label>
         <div class="row">
           <label class="field"><span>Data de nascimento *</span><input type="date" name="nascimento" required min="1900-01-01" autocomplete="bday"></label>
@@ -418,7 +418,7 @@
   <div class="evento evento-global" id="msgGlobal" role="status" aria-live="polite" hidden></div>
 
   <!-- cadastro.js vem ANTES do script.js para assumir login/cadastro -->
-  <script src="js/cadastro.js"></script>
+  <script src="cadastro.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>
