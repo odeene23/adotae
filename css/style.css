@@ -392,3 +392,56 @@ input:user-invalid, select:user-invalid, textarea:user-invalid { border-color: #
 @media (max-width: 520px) {
   .hero-logo { position: static !important; width: 112px !important; margin: 0 0 1.25rem auto !important; }
 }
+
+
+/* Ajuste fino da logo no destaque: alinhada ao conteúdo e sem parecer solta */
+.hero-logo {
+  position: absolute !important;
+  z-index: 1;
+  right: max(5vw, calc((100vw - 1180px) / 2 + 26px)) !important;
+  top: 48% !important;
+  transform: translateY(-50%) !important;
+  width: clamp(230px, 25vw, 330px) !important;
+  height: auto !important;
+  aspect-ratio: 1;
+  object-fit: contain;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, .96);
+  border: 1px solid rgba(255, 255, 255, .7);
+  box-shadow: 0 18px 42px rgba(3, 18, 38, .24);
+}
+.hero-in { padding-right: min(32vw, 370px) !important; }
+@media (max-width: 900px) {
+  .hero-logo {
+    right: 4vw !important;
+    width: clamp(190px, 25vw, 245px) !important;
+  }
+  .hero-in { padding-right: min(29vw, 270px) !important; }
+}
+@media (max-width: 760px) {
+  .hero-logo {
+    right: 1rem !important;
+    top: 1.25rem !important;
+    width: clamp(112px, 23vw, 160px) !important;
+    padding: 6px;
+    border-radius: 18px;
+    transform: none !important;
+  }
+  .hero-in { padding-right: 0 !important; }
+  .hero h1 { max-width: 17ch; }
+}
+@media (max-width: 520px) {
+  .hero-logo {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: block !important;
+    width: 104px !important;
+    margin: 0 auto 1rem !important;
+    padding: 5px;
+    border-radius: 16px;
+  }
+}
