@@ -424,7 +424,8 @@ function trocarAba(aba) {
 $$('.tab').forEach(t => t.addEventListener('click', () => trocarAba(t.dataset.tab)));
 
 ligarEstadoCidade($('#cadUf'), $('#cadCidade'));
-mascaraTelefone($('#cadastroForm [name="telefone"]'));
+// O cadastro.js já aplica a máscara ao campo [name="celular"].
+// Não chamar mascaraTelefone aqui: o formulário não possui um campo [name="telefone"].
 
 $('#btnConta').addEventListener('click', () => usuario ? toast(`Você está conectado como ${usuario.email}`) : abrirAuth('login'));
 $('#btnSair').addEventListener('click', () => {
