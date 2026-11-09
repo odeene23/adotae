@@ -176,7 +176,7 @@
     var texto=form.querySelector('[data-date-text]'), picker=form.querySelector('[data-date-picker]'), iso=form.elements.nascimento;
     if (!texto || !picker || !iso) return;
     function aplicarISO(valor) {
-      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(valor)) return false;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(valor)) return false;
       var p=valor.split('-'), d=new Date(Number(p[0]),Number(p[1])-1,Number(p[2]));
       if(d.getFullYear()!==Number(p[0])||d.getMonth()!==Number(p[1])-1||d.getDate()!==Number(p[2])) return false;
       iso.value=valor; texto.value=p[2]+'/'+p[1]+'/'+p[0]; picker.value=valor; texto.setCustomValidity(''); return true;
@@ -184,7 +184,7 @@
     texto.addEventListener('input',function(){
       var v=texto.value.replace(/[^0-9]/g,'').slice(0,8);
       texto.value=v.length>4?v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4):v.length>2?v.slice(0,2)+'/'+v.slice(2):v;
-      var m=texto.value.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/);
+      var m=texto.value.match(/^(\d{2})\\/(\d{2})\\/(\d{4})$/);
       if(!m){iso.value='';picker.value='';return;}
       if(!aplicarISO(m[3]+'-'+m[2]+'-'+m[1])) { iso.value=''; picker.value=''; }
     });
@@ -195,7 +195,7 @@
   configurarData(formCad);
   configurarData(formRec);
   document.addEventListener('input',function(e){
-    if(e.target.matches('[data-letters-only]')) e.target.value=e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\\s'-]/g,'');
+    if(e.target.matches('[data-letters-only]')) e.target.value=e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,'');
   });
 
 
