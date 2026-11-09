@@ -27,6 +27,35 @@
   }
   function digitos(s) { return String(s || '').replace(/\D/g, ''); }
 
+  var ESTADOS_CAD = { AC:'Acre', AL:'Alagoas', AP:'Amapá', AM:'Amazonas', BA:'Bahia', CE:'Ceará', DF:'Distrito Federal', ES:'Espírito Santo', GO:'Goiás', MA:'Maranhão', MT:'Mato Grosso', MS:'Mato Grosso do Sul', MG:'Minas Gerais', PA:'Pará', PB:'Paraíba', PR:'Paraná', PE:'Pernambuco', PI:'Piauí', RJ:'Rio de Janeiro', RN:'Rio Grande do Norte', RS:'Rio Grande do Sul', RO:'Rondônia', RR:'Roraima', SC:'Santa Catarina', SP:'São Paulo', SE:'Sergipe', TO:'Tocantins' };
+  var selCadUf = $('#cadUf'), selCadCidade = $('#cadCidade');
+  if (selCadUf && selCadCidade) {
+    selCadUf.innerHTML = '<option value="">Selecione o estado</option>';
+    Object.keys(ESTADOS_CAD).forEach(function (uf) {
+      selCadUf.appendChild(new Option(ESTADOS_CAD[uf] + ' (' + uf + ')', uf));
+    });
+    selCadCidade.innerHTML = '<option value="">Escolha o estado primeiro</option>';
+    selCadCidade.disabled = true;
+    selCadUf.addEventListener('change', function () {
+      var uf = selCadUf.value;
+      selCadCidade.disabled = true;
+      selCadCidade.innerHTML = '<option value="">Carregando cidades...</option>';
+      if (!uf) { selCadCidade.innerHTML = '<option value="">Escolha o estado primeiro</option>'; return; }
+      fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + uf + '/municipios?orderBy=nome')
+        .then(function (r) { if (!r.ok) throw new Error('IBGE'); return r.json(); })
+        .then(function (cidades) {
+          selCadCidade.innerHTML = '<option value="">Selecione a cidade</option>';
+          cidades.forEach(function (c) { selCadCidade.appendChild(new Option(c.nome, c.nome)); });
+          selCadCidade.disabled = false;
+        })
+        .catch(function () {
+          selCadCidade.innerHTML = '<option value="">Digite seu CEP para preencher a cidade</option>';
+          selCadCidade.disabled = false;
+        });
+    });
+  }
+
+
   function lerUsuarios() {
     try { return JSON.parse(localStorage.getItem(KEY_USUARIOS)) || []; } catch (e) { return []; }
   }
