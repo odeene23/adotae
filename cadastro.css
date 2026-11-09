@@ -1,0 +1,137 @@
+/* =====================================================
+   Adotaê — ajustes de cadastro, logo e responsividade
+   Carregado DEPOIS do style.css (não substitui o seu arquivo)
+   ===================================================== */
+
+/* ---------- Logo maior e mais visível ---------- */
+.topbar .brand { gap: .75rem; }
+.topbar .brand img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.topbar .brand span { font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1; }
+.topbar-in { height: auto; min-height: 104px; flex-wrap: wrap; gap: .5rem 1rem; }
+
+@media (max-width: 900px) {
+  .topbar .brand img { width: 72px; height: 72px; }
+  .topbar-in { min-height: 88px; }
+}
+@media (max-width: 600px) {
+  .topbar .brand img { width: 60px; height: 60px; }
+  .topbar .brand span { font-size: 1.5rem; }
+  .topbar-in { justify-content: center; }
+  .tools { flex-wrap: wrap; justify-content: center; gap: .4rem; }
+}
+
+/* ---------- Responsividade geral (só o que é seguro sem ver o style.css) ---------- */
+img, video { max-width: 100%; }
+
+/* ---------- Modal de acesso / cadastro ---------- */
+#auth {
+  width: min(640px, 96vw);
+  max-width: 96vw;
+  max-height: 92vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+#auth .form { display: grid; gap: .9rem; }
+#auth .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: .75rem;
+}
+#auth input, #auth select { width: 100%; max-width: 100%; box-sizing: border-box; }
+#auth .field small { font-weight: 400; opacity: .75; }
+
+.grupo {
+  display: grid;
+  gap: .8rem;
+  margin: 0;
+  padding: .9rem 1rem 1rem;
+  border: 1px solid rgba(128, 128, 128, .35);
+  border-radius: .75rem;
+  min-width: 0;
+}
+.grupo legend { padding: 0 .4rem; font-weight: 700; }
+
+.cep-linha { display: flex; gap: .6rem; align-items: flex-end; }
+.cep-linha .field { flex: 1; min-width: 0; }
+.cep-linha .btn { white-space: nowrap; }
+@media (max-width: 420px) {
+  .cep-linha { flex-direction: column; align-items: stretch; }
+}
+
+.dica { margin: 0; font-size: .9rem; }
+.dica.ok { color: #15803d; font-weight: 700; }
+.dica.erro { color: #b91c1c; font-weight: 700; }
+
+input.invalido, select.invalido { border-color: #dc2626 !important; outline-color: #dc2626; }
+
+.link-btn {
+  background: none;
+  border: 0;
+  padding: .3rem 0;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  color: inherit;
+  justify-self: center;
+}
+.rec-titulo { margin: 0; }
+.rec-ok {
+  margin: 0;
+  padding: .7rem .9rem;
+  border-radius: .6rem;
+  background: #dcfce7;
+  color: #14532d;
+  border: 1px solid #16a34a;
+  font-weight: 700;
+}
+
+/* ---------- Força da senha ---------- */
+.forca { display: grid; gap: .35rem; }
+.forca-barra { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; }
+.forca-barra i {
+  display: block;
+  height: .45rem;
+  border-radius: 99px;
+  background: rgba(128, 128, 128, .3);
+  transition: background .2s;
+}
+.forca[data-nivel="1"] .forca-barra i:nth-child(-n+1) { background: #dc2626; }
+.forca[data-nivel="2"] .forca-barra i:nth-child(-n+2) { background: #f59e0b; }
+.forca[data-nivel="3"] .forca-barra i:nth-child(-n+3) { background: #16a34a; }
+.forca-txt { margin: 0; font-size: .9rem; }
+.forca[data-nivel="1"] .forca-txt { color: #b91c1c; }
+.forca[data-nivel="2"] .forca-txt { color: #b45309; }
+.forca[data-nivel="3"] .forca-txt { color: #15803d; }
+
+/* ---------- Mensagens de evento ---------- */
+.evento {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: .6rem 0;
+  padding: .75rem 1rem;
+  border-radius: .6rem;
+  border: 1px solid;
+  font-weight: 700;
+}
+.evento[hidden] { display: none; }
+.evento-ok   { background: #dcfce7; color: #14532d; border-color: #16a34a; }
+.evento-erro { background: #fee2e2; color: #7f1d1d; border-color: #dc2626; }
+
+.evento-global {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  top: auto;
+  transform: translateX(-50%);
+  width: min(92vw, 460px);
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+  text-align: center;
+}
