@@ -60,19 +60,17 @@
 
   var timerMsg;
   function mostrarMensagem(texto, tipo) {
-    // dentro do modal aberto usa o banner do dialog; fora dele usa o aviso global
-    var alvo = auth.open ? $('#msgEvento') : $('#msgGlobal');
+    var alvo = $('#msgGlobal');
     if (!alvo) { return; }
-    $('#msgEvento').hidden = true;
-    $('#msgGlobal').hidden = true;
     alvo.textContent = texto;
-    alvo.className = 'evento evento-' + tipo + (alvo.id === 'msgGlobal' ? ' evento-global' : '');
+    alvo.className = 'evento evento-' + tipo + ' evento-global';
     alvo.hidden = false;
     clearTimeout(timerMsg);
     timerMsg = setTimeout(function () { alvo.hidden = true; }, 7000);
   }
 
   document.addEventListener('cadastro:sucesso', function () {
+    if (auth.open) { auth.close(); }
     mostrarMensagem('Cadastro realizado com sucesso!', 'ok');
   });
   document.addEventListener('cep:erro', function () {
@@ -107,7 +105,6 @@
       t.classList.toggle('on', ativo);
       t.setAttribute('aria-selected', ativo ? 'true' : 'false');
     });
-    $('#msgEvento').hidden = true;
   }
 
   $$('.tab', auth).forEach(function (t) {
