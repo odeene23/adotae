@@ -69,9 +69,7 @@
   <main>
     <!-- ================= HERO ================= -->
     <section class="hero" aria-labelledby="heroTitulo">
-      <svg class="hero-house" viewBox="0 0 200 180" aria-hidden="true">
-        <path d="M20 95 L100 25 L180 95 M40 85 V160 H160 V85 M140 45 V70" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <img class="hero-logo" src="img/logo.jpeg" alt="Logo do Adotaê">
       <div class="wrap hero-in">
         <h1 id="heroTitulo">Um animal pode ser apenas uma parte da sua vida, mas para ele, você é a vida inteira dele.</h1>
         <p class="hero-sub">Encontre um cachorro, gato ou outro amigo para adotar, ou ache uma nova família para quem você não pode mais cuidar.</p>
@@ -231,13 +229,14 @@
       <button class="tab" role="tab" type="button" data-tab="cadastro" aria-selected="false">Criar conta</button>
     </div>
 
-    <!-- Mensagens de evento (sucesso/erro) ficam DENTRO do dialog para aparecerem acima do modal -->
-    <div class="evento" id="msgEvento" role="status" aria-live="polite" hidden></div>
-
     <form id="loginForm" class="form" data-panel="login" novalidate>
       <label class="field"><span>Usuário</span><input type="text" name="usuario" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
       <label class="field"><span>Senha</span><input type="password" name="senha" data-senha required autocomplete="current-password"></label>
-      <label class="check"><input type="checkbox" class="mostrar-senha"> Mostrar senha</label>
+      <label class="show-password-toggle">
+        <input type="checkbox" class="mostrar-senha">
+        <span class="show-password-switch" aria-hidden="true"></span>
+        <span class="show-password-text">Mostrar senha</span>
+      </label>
       <p class="form-erro" id="loginErro" role="alert" hidden></p>
       <button class="btn btn-primary btn-block" type="submit">Entrar</button>
       <button class="link-btn" type="button" id="abrirRecuperar">Esqueci meu usuário ou senha</button>
@@ -296,7 +295,11 @@
         <label class="field"><span>Confirmar senha *</span>
           <input type="password" name="confirmar" id="cadConfirmar" data-senha required minlength="6" autocomplete="new-password"></label>
         <p class="dica" id="confirmaMsg" aria-live="polite" hidden></p>
-        <label class="check"><input type="checkbox" class="mostrar-senha"> Mostrar senha</label>
+        <label class="show-password-toggle">
+        <input type="checkbox" class="mostrar-senha">
+        <span class="show-password-switch" aria-hidden="true"></span>
+        <span class="show-password-text">Mostrar senha</span>
+      </label>
       </fieldset>
 
       <p class="form-erro" id="cadErro" role="alert" hidden></p>
@@ -313,7 +316,11 @@
       </div>
       <label class="field"><span>Nova senha <small>(opcional, mínimo 6 caracteres)</small></span>
         <input type="password" name="novaSenha" data-senha minlength="6" autocomplete="new-password"></label>
-      <label class="check"><input type="checkbox" class="mostrar-senha"> Mostrar senha</label>
+      <label class="show-password-toggle">
+        <input type="checkbox" class="mostrar-senha">
+        <span class="show-password-switch" aria-hidden="true"></span>
+        <span class="show-password-text">Mostrar senha</span>
+      </label>
       <p class="form-erro" id="recErro" role="alert" hidden></p>
       <p class="rec-ok" id="recOk" role="status" hidden></p>
       <button class="btn btn-primary btn-block" type="submit">Recuperar</button>
