@@ -396,91 +396,37 @@ $$('dialog').forEach(d => {
   });
 });
 
-/* ---------- 7. CONTA (cadastro e login) ---------- */
-const dlgAuth = $('#auth');
+/* ---------- 7. CONTA (páginas independentes) ---------- */
 let usuario = store.get('usuario', null);
 let depoisDeEntrar = null;
 
 function atualizarConta() {
-  $('#btnConta').textContent = usuario ? `Olá, ${usuario.nome.split(' ')[0]}` : 'Entrar';
-  $('#btnSair').hidden = !usuario;
+  const botaoConta = $('#btnConta');
+  if (botaoConta) botaoConta.textContent = usuario ? `Olá, ${usuario.nome.split(' ')[0]}` : 'Entrar';
+  const botaoSair = $('#btnSair');
+  if (botaoSair) botaoSair.hidden = !usuario;
 }
 
-function abrirAuth(aba = 'login') {
-  trocarAba(aba);
-  $('#loginErro').hidden = true;
-  $('#cadErro').hidden = true;
-  dlgAuth.showModal();
-}
-
-function trocarAba(aba) {
-  $$('.tab').forEach(t => {
-    const on = t.dataset.tab === aba;
-    t.classList.toggle('on', on);
-    t.setAttribute('aria-selected', on);
+if ($('#btnConta')) {
+  $('#btnConta').addEventListener('click', () => {
+    if (usuario) toast(`Você está conectado como ${usuario.email || usuario.usuario || 'sua conta'}`);
+    else window.location.href = 'login.html';
   });
-  $$('[data-panel]').forEach(f => f.hidden = f.dataset.panel !== aba);
 }
-$$('.tab').forEach(t => t.addEventListener('click', () => trocarAba(t.dataset.tab)));
-
-ligarEstadoCidade($('#cadUf'), $('#cadCidade'));
-// O cadastro.js já aplica a máscara ao campo [name="celular"].
-// Não chamar mascaraTelefone aqui: o formulário não possui um campo [name="telefone"].
-
-$('#btnConta').addEventListener('click', () => usuario ? toast(`Você está conectado como ${usuario.email}`) : abrirAuth('login'));
-$('#btnSair').addEventListener('click', () => {
+if ($('#btnSair')) $('#btnSair').addEventListener('click', () => {
   usuario = null;
   store.set('usuario', null);
+  localStorage.removeItem('adotae_sessao');
+  localStorage.removeItem('adotae_usuario');
   atualizarConta();
   toast('Você saiu da conta');
 });
 
-$('#cadastroForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const f = e.target, erro = $('#cadErro');
-  const dados = Object.fromEntries(new FormData(f));
-  erro.hidden = false;
-  if (dados.nome.trim().length < 3) return erro.textContent = 'Informe seu nome completo.';
-  if (!/^\S+@\S+\.\S+$/.test(dados.email)) return erro.textContent = 'Informe um e-mail válido.';
-  if (dados.senha.length < 6) return erro.textContent = 'A senha precisa ter pelo menos 6 caracteres.';
-  if (!telefoneValido(dados.telefone)) return erro.textContent = 'Informe o telefone com DDD.';
-  if (!dados.uf || !dados.cidade) return erro.textContent = 'Escolha seu estado e sua cidade.';
-
-  const usuarios = store.get('usuarios', []);
-  if (usuarios.some(u => u.email.toLowerCase() === dados.email.toLowerCase())) return erro.textContent = 'Este e-mail já está cadastrado. Tente entrar.';
-
-  const novo = { id: 'u' + Date.now(), nome: dados.nome.trim(), email: dados.email.trim(), senha: await hash(dados.senha), telefone: dados.telefone, uf: dados.uf, cidade: dados.cidade };
-  usuarios.push(novo);
-  store.set('usuarios', usuarios);
-  entrar(novo);
-  erro.hidden = true;
-  f.reset();
-  preencherCidades('', $('#cadCidade'));
-  dlgAuth.close();
-  toast('Conta criada! Bem-vindo(a) ao Adotaê.');
-});
-
-$('#loginForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const dados = Object.fromEntries(new FormData(e.target));
-  const erro = $('#loginErro');
-  const h = await hash(dados.senha);
-  const u = store.get('usuarios', []).find(x => x.email.toLowerCase() === dados.email.trim().toLowerCase() && x.senha === h);
-  if (!u) { erro.hidden = false; erro.textContent = 'E-mail ou senha incorretos.'; return; }
-  erro.hidden = true;
-  entrar(u);
-  e.target.reset();
-  dlgAuth.close();
-  toast(`Olá, ${u.nome.split(' ')[0]}!`);
-});
-
 function entrar(u) {
-  usuario = { id: u.id, nome: u.nome, email: u.email, telefone: u.telefone, uf: u.uf, cidade: u.cidade };
+  usuario = { id: u.id, nome: u.nome, email: u.email || '', telefone: u.telefone || u.celular || '', uf: u.uf || '', cidade: u.cidade || '' };
   store.set('usuario', usuario);
   atualizarConta();
-  if (depoisDeEntrar) { const fn = depoisDeEntrar; depoisDeEntrar = null; setTimeout(fn, 300); }
 }
-
 /* ---------- 8. ANUNCIAR (doar ou adotar) ---------- */
 const dlgAnuncio = $('#anuncio');
 const formAnuncio = $('#anuncioForm');
@@ -489,9 +435,9 @@ mascaraTelefone($('#anTel'));
 
 $('#btnAnunciar').addEventListener('click', () => {
   if (!usuario) {
-    depoisDeEntrar = abrirAnuncio;
     toast('Entre ou crie sua conta para anunciar.');
-    return abrirAuth('login');
+    window.location.href = 'login.html?next=anunciar';
+    return;
   }
   abrirAnuncio();
 });
