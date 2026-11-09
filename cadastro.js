@@ -76,9 +76,9 @@
     mostrarMensagem('Cadastro realizado com sucesso!', 'ok');
   });
   document.addEventListener('cep:erro', function () {
-    mostrarMensagem('Falha na consulta', 'erro');
+    mostrarMensagem('falha na consulta', 'erro');
     var msg = $('#cepMsg');
-    msg.textContent = 'Falha na consulta';
+    msg.textContent = 'falha na consulta';
     msg.className = 'dica erro';
     msg.hidden = false;
     formCad.elements.cep.classList.add('invalido');
@@ -284,6 +284,12 @@
       return;
     }
     if (!formCad.reportValidity()) { return; }
+
+    var nomeCompleto = f.nome.value.trim();
+    if (nomeCompleto.length < 15 || nomeCompleto.length > 60 || !/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/.test(nomeCompleto)) {
+      erroCad('O nome completo deve ter de 15 a 60 caracteres e conter somente letras e espaços.');
+      f.nome.focus(); return;
+    }
 
     var nasc = new Date(f.nascimento.value + 'T00:00:00');
     if (isNaN(nasc.getTime()) || nasc > new Date() || nasc.getFullYear() < 1900) {
