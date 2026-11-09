@@ -70,8 +70,7 @@
   }
 
   document.addEventListener('cadastro:sucesso', function () {
-    if (auth.open) { auth.close(); }
-    mostrarMensagem('Cadastro realizado com sucesso!', 'ok');
+    mostrarMensagem('Cadastro realizado com sucesso! Agora você já pode entrar.', 'ok');
   });
   document.addEventListener('cep:erro', function () {
     mostrarMensagem('falha na consulta', 'erro');
@@ -100,14 +99,16 @@
     formLogin.hidden = nome !== 'login';
     formCad.hidden = nome !== 'cadastro';
     formRec.hidden = nome !== 'recuperar';
-    $$('.tab', auth).forEach(function (t) {
+    $('.tab', auth).forEach(function (t) {
       var ativo = t.getAttribute('data-tab') === (nome === 'recuperar' ? 'login' : nome);
       t.classList.toggle('on', ativo);
       t.setAttribute('aria-selected', ativo ? 'true' : 'false');
     });
   }
 
-  $$('.tab', auth).forEach(function (t) {
+  mostrarPainel(document.body.getAttribute('data-auth-page') || 'login');
+
+  $('.tab', auth).forEach(function (t) {
     t.addEventListener('click', function () { mostrarPainel(t.getAttribute('data-tab')); });
   });
   $('#abrirRecuperar').addEventListener('click', function () { mostrarPainel('recuperar'); });
@@ -339,8 +340,8 @@
       cadSenha.dispatchEvent(new Event('input'));
       $('#cepMsg').hidden = true;
       formLogin.elements.usuario.value = usuario;
-      mostrarPainel('login');
-      formLogin.elements.senha.focus();
+      formLogin.elements.usuario.value = usuario;
+      mostrarMensagem('Cadastro realizado com sucesso! Agora você já pode entrar.', 'ok');
       emitir('cadastro:sucesso', { usuario: usuario, nome: nome });
     });
   });
@@ -373,9 +374,10 @@
       if (h !== user.senha) { erroLogin('Usuário ou senha incorretos.'); return; }
       try { localStorage.setItem(KEY_SESSAO, user.usuario); } catch (err) { /* ignora */ }
       formLogin.reset();
-      if (auth.open) { auth.close(); }
       aplicarSessao();
+      try { localStorage.setItem('adotae_usuario', JSON.stringify({ nome: user.nome, usuario: user.usuario })); } catch (err) { /* ignora */ }
       emitir('login:sucesso', { usuario: user.usuario, nome: user.nome });
+      window.location.href = 'index.html';
     });
   });
 
