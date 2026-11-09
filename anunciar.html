@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adotaê — Anunciar animal</title><meta name="description" content="Publique um animal para adoção ou conte qual animal você procura.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="cadastro.css"></head>
+<body class="auth-page announce-page">
+<header class="auth-header"><a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a><nav class="announce-nav"><a href="index.html">Procurar animais</a><a href="acesso.html">Minha conta</a></nav></header>
+<main class="auth-main announce-main"><h1>Ajude um animal a encontrar um lar</h1><p class="announce-intro">Publique um animal para adoção ou conte à comunidade qual amigo você procura.</p>
+  <section class="announce-card" aria-labelledby="anuncioTitulo">
+    <h2 id="anuncioTitulo">Novo anúncio</h2>
+    <form id="anuncioForm" class="form" novalidate>
+      <fieldset class="mode">
+        <legend class="sr-only">O que você quer fazer?</legend>
+        <label class="mode-opt"><input type="radio" name="tipo" value="doacao" checked><span>Quero doar um animal</span></label>
+        <label class="mode-opt"><input type="radio" name="tipo" value="procura"><span>Quero adotar um animal</span></label>
+      </fieldset>
+      <p class="hint" id="anuncioDica"></p>
+
+      <label class="field"><span data-doacao="Nome do animal" data-procura="Título do pedido (ex.: Procuro um gatinho)">Nome do animal</span>
+        <input type="text" name="nome" data-letters-only required maxlength="60"></label>
+
+      <div class="row">
+        <label class="field"><span>Espécie</span>
+          <select name="especie" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="cachorro">Cachorro</option>
+            <option value="gato">Gato</option>
+            <option value="outro">Outro</option>
+          </select></label>
+        <label class="field"><span data-doacao="Raça" data-procura="Raça desejada">Raça</span>
+          <input type="text" name="raca" data-letters-only required maxlength="40" placeholder="Se não tiver raça, escreva Sem Raça"></label>
+      </div>
+
+      <div class="row">
+        <label class="field"><span data-doacao="Idade" data-procura="Idade desejada">Idade</span>
+          <input type="number" name="idadeNum" required min="0" max="40" step="1" inputmode="numeric"></label>
+        <label class="field"><span>Unidade</span>
+          <select name="idadeUn" required>
+            <option value="meses">meses</option>
+            <option value="anos" selected>anos</option>
+          </select></label>
+        <label class="field"><span>Sexo</span>
+          <select name="sexo" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="Macho">Macho</option>
+            <option value="Fêmea">Fêmea</option>
+            <option value="Tanto faz">Tanto faz</option>
+          </select></label>
+      </div>
+
+      <div class="row">
+        <label class="field"><span data-doacao="Vacinas" data-procura="Vacinas">Vacinas</span>
+          <select name="vacina" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="sim">Vacinas em dia</option>
+            <option value="parcial">Vacinação parcial</option>
+            <option value="nao">Não vacinado</option>
+          </select></label>
+        <label class="field"><span data-doacao="Possui alguma deficiência?" data-procura="Aceita animal com deficiência?">Possui alguma deficiência?</span>
+          <select name="deficiencia" id="defSelect" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="nao" data-doacao="Não possui" data-procura="Prefiro sem deficiência">Não possui</option>
+            <option value="sim" data-doacao="Possui" data-procura="Aceito animal com deficiência">Possui</option>
+          </select></label>
+      </div>
+
+      <label class="field" id="defDetalheBox" hidden><span>Qual deficiência ou condição especial?</span>
+        <input type="text" name="deficienciaDetalhe" id="defDetalhe" data-letters-only maxlength="120" placeholder="Ex.: não enxerga do olho esquerdo"></label>
+
+      <div class="row">
+        <label class="field"><span>Porte</span>
+          <select name="porte" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Pequeno</option><option>Médio</option><option>Grande</option>
+          </select></label>
+        <label class="field"><span>Estado</span><select name="uf" id="anUf" required><option value="">Selecione</option><option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option></select></label>
+        <label class="field"><span>Cidade</span><input type="text" name="cidade" id="anCidade" data-letters-only required maxlength="60" placeholder="Digite sua cidade"></label>
+      </div>
+
+      <label class="field"><span>Descrição</span>
+        <textarea name="descricao" rows="3" required maxlength="500" placeholder="Conte sobre o jeitinho, a rotina e o que você espera da adoção"></textarea></label>
+
+      <label class="field"><span>Foto (opcional)</span>
+        <input type="file" name="foto" accept="image/*"></label>
+
+      <fieldset class="contact-box">
+        <legend>Contato para os interessados</legend>
+        <div class="row">
+          <label class="field"><span>Telefone / WhatsApp</span><input type="tel" name="telefone" id="anTel" required inputmode="tel"></label>
+          <label class="field"><span>E-mail</span><input type="email" name="email" id="anEmail" required></label>
+        </div>
+      </fieldset>
+
+      <p class="form-erro" id="anErro" role="alert" hidden></p>
+      <button class="btn btn-primary btn-block btn-lg" type="submit">Publicar anúncio</button>
+    </form>
+  </section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div></main>
+<script src="anunciar.js"></script></body></html>
