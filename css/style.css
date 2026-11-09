@@ -368,3 +368,27 @@ input:user-invalid, select:user-invalid, textarea:user-invalid { border-color: #
 .evento-global:not([hidden]) { transform: translate(-50%, 0); }
 .evento-global.evento-ok { background: #dcfce7; color: #14532d; border-color: #16a34a; }
 .evento-global.evento-erro { background: #fee2e2; color: #7f1d1d; border-color: #dc2626; }
+
+
+/* Destaque: usa somente a marca do Adotaê, nunca a ilustração antiga da casa */
+.hero-house { display: none !important; }
+.hero-logo {
+  position: absolute !important;
+  right: max(4vw, calc((100vw - 1180px) / 2)) !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  display: block !important;
+  width: clamp(220px, 29vw, 390px) !important;
+  height: auto !important;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 20px 55px rgba(0,0,0,.22);
+}
+@media (max-width: 760px) {
+  .hero-logo { width: clamp(112px, 25vw, 180px) !important; right: 1rem !important; top: 1.2rem !important; transform: none !important; }
+}
+@media (max-width: 520px) {
+  .hero-logo { position: static !important; width: 112px !important; margin: 0 0 1.25rem auto !important; }
+}
