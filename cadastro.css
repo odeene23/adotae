@@ -182,3 +182,22 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
 .show-password-toggle input:checked + .show-password-switch::after { transform: translateX(18px); }
 .show-password-toggle input:focus-visible + .show-password-switch { outline: 3px solid #f59e0b; outline-offset: 3px; }
 .show-password-toggle:hover .show-password-switch { filter: brightness(.96); }
+
+
+/* Páginas independentes de login e cadastro */
+.auth-page { min-height: 100vh; background: var(--bg); }
+.auth-header { width: min(1120px, 94vw); margin: 1.25rem auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.auth-header .brand { display:flex; align-items:center; gap:.7rem; text-decoration:none; color:var(--ink); font-family:'Baloo 2',sans-serif; font-size:1.8rem; font-weight:800; }
+.auth-header .brand img { width:64px; height:64px; object-fit:contain; }
+.auth-main { width:min(720px, 94vw); margin:1rem auto 3rem; }
+.auth-page #auth { display:block; position:static; inset:auto; margin:0 auto; width:100%; max-width:100%; max-height:none; overflow:visible; border:1px solid rgba(128,128,128,.22); border-radius:20px; box-shadow:0 18px 55px rgba(0,0,0,.12); padding:clamp(1rem,3vw,2rem); background:var(--surface); color:var(--ink); }
+.auth-page #auth::backdrop { display:none; }
+.auth-page #auth[open] { display:block; }
+.auth-links { display:flex; gap:.5rem; padding:.35rem; background:var(--bg); border-radius:12px; margin:0 0 1.25rem; }
+.auth-links a { flex:1; text-align:center; padding:.7rem; border-radius:9px; color:var(--ink); text-decoration:none; font-weight:800; }
+.auth-page[data-auth-page="login"] .auth-links a[data-auth-link="login"],
+.auth-page[data-auth-page="cadastro"] .auth-links a[data-auth-link="cadastro"] { background:var(--blue); color:#fff; }
+.auth-page #authTitulo { margin-top:0; }
+.auth-page .modal-close { display:none; }
+.auth-page .form[hidden] { display:none !important; }
+@media(max-width:520px) { .auth-header .brand img { width:48px;height:48px; } .auth-header .brand {font-size:1.45rem;} }
