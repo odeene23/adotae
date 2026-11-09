@@ -113,10 +113,7 @@
   });
   $('#abrirRecuperar').addEventListener('click', function () { mostrarPainel('recuperar'); });
   $('#voltarLogin').addEventListener('click', function () { mostrarPainel('login'); });
-  auth.addEventListener('close', function () {
-    mostrarPainel('login');
-    $('#recOk').hidden = true;
-  });
+  // Acesso é uma página independente; os painéis são alternados pelas abas.
 
   /* ---------- mostrar / ocultar senha ---------- */
   document.addEventListener('change', function (e) {
@@ -144,6 +141,34 @@
   });
   formCad.elements.celular.addEventListener('input', function () { this.value = mascaraCel(this.value); });
   formRec.elements.celular.addEventListener('input', function () { this.value = mascaraCel(this.value); });
+
+  function configurarData(form) {
+    if (!form) return;
+    var texto=form.querySelector('[data-date-text]'), picker=form.querySelector('[data-date-picker]'), iso=form.elements.nascimento;
+    if (!texto || !picker || !iso) return;
+    function aplicarISO(valor) {
+      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(valor)) return false;
+      var p=valor.split('-'), d=new Date(Number(p[0]),Number(p[1])-1,Number(p[2]));
+      if(d.getFullYear()!==Number(p[0])||d.getMonth()!==Number(p[1])-1||d.getDate()!==Number(p[2])) return false;
+      iso.value=valor; texto.value=p[2]+'/'+p[1]+'/'+p[0]; picker.value=valor; texto.setCustomValidity(''); return true;
+    }
+    texto.addEventListener('input',function(){
+      var v=texto.value.replace(/[^0-9]/g,'').slice(0,8);
+      texto.value=v.length>4?v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4):v.length>2?v.slice(0,2)+'/'+v.slice(2):v;
+      var m=texto.value.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/);
+      if(!m){iso.value='';picker.value='';return;}
+      if(!aplicarISO(m[3]+'-'+m[2]+'-'+m[1])) { iso.value=''; picker.value=''; }
+    });
+    picker.addEventListener('change',function(){if(picker.value)aplicarISO(picker.value);});
+    texto.addEventListener('blur',function(){if(texto.value&&!iso.value)texto.setCustomValidity('Digite uma data válida no formato DD/MM/AAAA.');});
+    texto.addEventListener('input',function(){texto.setCustomValidity('');});
+  }
+  configurarData(formCad);
+  configurarData(formRec);
+  document.addEventListener('input',function(e){
+    if(e.target.matches('[data-letters-only]')) e.target.value=e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\\s'-]/g,'');
+  });
+
 
   /* ---------- ViaCEP ---------- */
   function selecionar(sel, valor, criar) {
@@ -340,7 +365,7 @@
       cadSenha.dispatchEvent(new Event('input'));
       $('#cepMsg').hidden = true;
       formLogin.elements.usuario.value = usuario;
-      formLogin.elements.usuario.value = usuario;
+      mostrarPainel('login');
       mostrarMensagem('Cadastro realizado com sucesso! Agora você já pode entrar.', 'ok');
       emitir('cadastro:sucesso', { usuario: usuario, nome: nome });
     });
@@ -375,7 +400,7 @@
       try { localStorage.setItem(KEY_SESSAO, user.usuario); } catch (err) { /* ignora */ }
       formLogin.reset();
       aplicarSessao();
-      try { localStorage.setItem('adotae_usuario', JSON.stringify({ nome: user.nome, usuario: user.usuario })); } catch (err) { /* ignora */ }
+      try { localStorage.setItem('adotae_usuario', JSON.stringify({ id:user.usuario, nome:user.nome, usuario:user.usuario, telefone:user.celular||'', celular:user.celular||'', email:'', uf:user.endereco&&user.endereco.uf||'', cidade:user.endereco&&user.endereco.cidade||'', endereco:user.endereco||{} })); } catch (err) { /* ignora */ }
       emitir('login:sucesso', { usuario: user.usuario, nome: user.nome });
       window.location.href = 'index.html';
     });
