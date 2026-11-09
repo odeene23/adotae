@@ -128,7 +128,7 @@
     formLogin.hidden = nome !== 'login';
     formCad.hidden = nome !== 'cadastro';
     formRec.hidden = nome !== 'recuperar';
-    $('.tab', auth).forEach(function (t) {
+    $$('.tab', auth).forEach(function (t) {
       var ativo = t.getAttribute('data-tab') === (nome === 'recuperar' ? 'login' : nome);
       t.classList.toggle('on', ativo);
       t.setAttribute('aria-selected', ativo ? 'true' : 'false');
@@ -137,7 +137,7 @@
 
   mostrarPainel(document.body.getAttribute('data-auth-page') || 'login');
 
-  $('.tab', auth).forEach(function (t) {
+  $$('.tab', auth).forEach(function (t) {
     t.addEventListener('click', function () { mostrarPainel(t.getAttribute('data-tab')); });
   });
   $('#abrirRecuperar').addEventListener('click', function () { mostrarPainel('recuperar'); });
