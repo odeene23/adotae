@@ -184,7 +184,7 @@
     texto.addEventListener('input',function(){
       var v=texto.value.replace(/[^0-9]/g,'').slice(0,8);
       texto.value=v.length>4?v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4):v.length>2?v.slice(0,2)+'/'+v.slice(2):v;
-      var m=texto.value.match(/^(\d{2})\\/(\d{2})\\/(\d{4})$/);
+      var m=texto.value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
       if(!m){iso.value='';picker.value='';return;}
       if(!aplicarISO(m[3]+'-'+m[2]+'-'+m[1])) { iso.value=''; picker.value=''; }
     });
