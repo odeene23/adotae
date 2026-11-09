@@ -407,12 +407,7 @@ function atualizarConta() {
   if (botaoSair) botaoSair.hidden = !usuario;
 }
 
-if ($('#btnConta')) {
-  $('#btnConta').addEventListener('click', () => {
-    if (usuario) toast(`Você está conectado como ${usuario.email || usuario.usuario || 'sua conta'}`);
-    else window.location.href = 'login.html';
-  });
-}
+if ($('#btnConta')) $('#btnConta').href = 'acesso.html';
 if ($('#btnSair')) $('#btnSair').addEventListener('click', () => {
   usuario = null;
   store.set('usuario', null);
@@ -427,122 +422,9 @@ function entrar(u) {
   store.set('usuario', usuario);
   atualizarConta();
 }
-/* ---------- 8. ANUNCIAR (doar ou adotar) ---------- */
-const dlgAnuncio = $('#anuncio');
-const formAnuncio = $('#anuncioForm');
-ligarEstadoCidade($('#anUf'), $('#anCidade'));
-mascaraTelefone($('#anTel'));
-
-$('#btnAnunciar').addEventListener('click', () => {
-  if (!usuario) {
-    toast('Entre ou crie sua conta para anunciar.');
-    window.location.href = 'login.html?next=anunciar';
-    return;
-  }
-  abrirAnuncio();
-});
-
-function abrirAnuncio() {
-  $('#anTel').value = usuario.telefone || '';
-  $('#anEmail').value = usuario.email || '';
-  if (usuario.uf) {
-    $('#anUf').value = usuario.uf;
-    preencherCidades(usuario.uf, $('#anCidade'), { valor: usuario.cidade });
-  }
-  definirModo(formAnuncio.tipo.value || 'doacao');
-  dlgAnuncio.showModal();
-}
-
-/* troca textos do formulário conforme "doar" ou "adotar" */
-function definirModo(modo) {
-  $$('[data-doacao]', formAnuncio).forEach(el => el.textContent = el.dataset[modo]);
-  $('#anuncioDica').textContent = modo === 'doacao'
-    ? 'Preencha os dados do animal que você quer doar. Todos os campos marcados são obrigatórios.'
-    : 'Conte qual animal você procura para que os doadores encontrem você.';
-}
-$$('input[name="tipo"]', formAnuncio).forEach(r => r.addEventListener('change', () => definirModo(r.value)));
-
-/* deficiência: pede detalhe quando "sim" */
-$('#defSelect').addEventListener('change', e => {
-  const sim = e.target.value === 'sim';
-  $('#defDetalheBox').hidden = !sim;
-  $('#defDetalhe').required = sim;
-});
-
-function lerFoto(arquivo) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(arquivo);
-    img.onload = () => {
-      const max = 700, escala = Math.min(1, max / Math.max(img.width, img.height));
-      const c = document.createElement('canvas');
-      c.width = Math.round(img.width * escala);
-      c.height = Math.round(img.height * escala);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-      URL.revokeObjectURL(url);
-      resolve(c.toDataURL('image/jpeg', 0.8));
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
-}
-
-formAnuncio.addEventListener('submit', async e => {
-  e.preventDefault();
-  const erro = $('#anErro');
-  const d = Object.fromEntries(new FormData(formAnuncio));
-  const falta = [];
-
-  /* campos obrigatórios (idade, raça, vacina e deficiência são exigidos por regra do projeto) */
-  if (!d.nome?.trim()) falta.push('nome');
-  if (!d.especie) falta.push('espécie');
-  if (!d.raca?.trim()) falta.push('raça');
-  if (d.idadeNum === '' || d.idadeNum == null) falta.push('idade');
-  if (!d.vacina) falta.push('vacinas');
-  if (!d.deficiencia) falta.push('deficiência');
-  if (d.deficiencia === 'sim' && !d.deficienciaDetalhe?.trim()) falta.push('qual deficiência');
-  if (!d.sexo) falta.push('sexo');
-  if (!d.porte) falta.push('porte');
-  if (!d.uf || !d.cidade) falta.push('estado e cidade');
-  if (!d.descricao?.trim()) falta.push('descrição');
-  if (!telefoneValido(d.telefone || '')) falta.push('telefone com DDD');
-  if (!/^\S+@\S+\.\S+$/.test(d.email || '')) falta.push('e-mail');
-
-  if (falta.length) {
-    erro.hidden = false;
-    erro.textContent = 'Preencha os campos obrigatórios: ' + falta.join(', ') + '.';
-    return;
-  }
-  erro.hidden = true;
-
-  let foto = '';
-  const arq = d.foto;
-  if (arq && arq.size) {
-    try { foto = await lerFoto(arq); } catch { toast('Não foi possível ler a foto, o anúncio será publicado sem ela.'); }
-  }
-
-  const meses = Number(d.idadeNum) * (d.idadeUn === 'anos' ? 12 : 1);
-  const pet = {
-    id: 'p' + Date.now(), donoId: usuario.id, tipo: d.tipo,
-    nome: d.nome.trim(), especie: d.especie, raca: d.raca.trim(), idadeMeses: meses,
-    sexo: d.sexo, porte: d.porte, vacina: d.vacina,
-    deficiencia: d.deficiencia, deficienciaDetalhe: d.deficiencia === 'sim' ? d.deficienciaDetalhe.trim() : '',
-    descricao: d.descricao.trim(), uf: d.uf, cidade: d.cidade,
-    contato: { nome: usuario.nome, telefone: d.telefone, email: d.email.trim() },
-    foto
-  };
-  const lista = store.get('pets', []);
-  lista.unshift(pet);
-  if (!store.set('pets', lista)) return;
-
-  formAnuncio.reset();
-  preencherCidades('', $('#anCidade'));
-  $('#defDetalheBox').hidden = true;
-  dlgAnuncio.close();
-  $('#limparFiltros').click();
-  toast('Anúncio publicado!');
-  $('#animais').scrollIntoView();
-});
+/* ---------- 8. ANUNCIAR: página exclusiva ---------- */
+const btnAnunciar = $('#btnAnunciar');
+if (btnAnunciar) btnAnunciar.href = 'anunciar.html';
 
 /* ---------- 9. CONTATO ---------- */
 $('#contatoForm').addEventListener('submit', e => {
