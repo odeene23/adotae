@@ -126,9 +126,30 @@ img { max-width: 100%; display: block; }
 /* ---------- hero ---------- */
 .hero { position: relative; overflow: hidden; background: var(--blue); color: #fff; padding: 3.5rem 0 4rem; }
 [data-theme="dark"] .hero { background: linear-gradient(160deg, #0f3a6b, #0a1f3a); }
-.hero-house { position: absolute; right: -2rem; top: -1rem; width: min(520px, 70vw); color: #fff; opacity: .1; pointer-events: none; }
+.hero-logo {
+  position: absolute;
+  right: max(4vw, calc((100vw - 1180px) / 2));
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(220px, 29vw, 390px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .22);
+  pointer-events: none;
+}
 .hero-in { position: relative; }
 .hero h1 { font-size: clamp(2.2rem, 5.5vw, 3.8rem); font-weight: 800; max-width: 14ch; }
+.hero-in { padding-right: min(34vw, 410px); }
+@media (max-width: 760px) {
+  .hero-logo { width: clamp(112px, 25vw, 180px); right: 1rem; top: 1.2rem; transform: none; opacity: .9; }
+  .hero-in { padding-right: 0; }
+  .hero h1 { max-width: 18ch; }
+}
+@media (max-width: 520px) {
+  .hero-logo { position: static; display: block; width: 112px; margin: 0 0 1.25rem auto; transform: none; }
+}
 .hero-sub { max-width: 52ch; font-size: 1.15rem; margin: 1rem 0 1.8rem; opacity: .95; }
 
 .search {
@@ -325,3 +346,25 @@ input:user-invalid, select:user-invalid, textarea:user-invalid { border-color: #
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+
+/* Evento global de cadastro: mensagem destacada na própria página */
+.evento-global {
+  position: fixed;
+  left: 50%;
+  top: 1.25rem;
+  bottom: auto;
+  transform: translate(-50%, -160%);
+  width: min(92vw, 520px);
+  z-index: 10000;
+  padding: .95rem 1.2rem;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .24);
+  transition: transform .28s ease;
+}
+.evento-global:not([hidden]) { transform: translate(-50%, 0); }
+.evento-global.evento-ok { background: #dcfce7; color: #14532d; border-color: #16a34a; }
+.evento-global.evento-erro { background: #fee2e2; color: #7f1d1d; border-color: #dc2626; }
