@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cadastro.css">
 </head>
 <body id="topo">
 
@@ -32,7 +33,7 @@
   <header class="topbar">
     <div class="wrap topbar-in">
       <a class="brand" href="#topo" aria-label="Adotaê — início">
-        <img src="img/logo.jpeg" alt="" width="56" height="56">
+        <img src="img/logo.jpeg" alt="" width="88" height="88">
         <span>Adotaê</span>
       </a>
 
@@ -179,7 +180,7 @@
         <p>Nossa ideia é simples: informação clara e contato direto, para que a adoção seja segura e feita com responsabilidade.</p>
       </div>
       <ol class="steps" aria-label="Como funciona">
-        <li><strong>Crie sua conta</strong><span>Leva menos de um minuto. Basta nome, e-mail, senha, telefone e cidade.</span></li>
+        <li><strong>Crie sua conta</strong><span>Leva poucos minutos. Basta nome, CEP, celular e uma senha.</span></li>
         <li><strong>Publique ou procure</strong><span>Anuncie um animal para doação ou procure um para adotar, preenchendo os dados obrigatórios.</span></li>
         <li><strong>Combine direto</strong><span>Fale pelo WhatsApp, telefone ou e-mail e combine a adoção com tranquilidade.</span></li>
       </ol>
@@ -230,24 +231,93 @@
       <button class="tab" role="tab" type="button" data-tab="cadastro" aria-selected="false">Criar conta</button>
     </div>
 
+    <!-- Mensagens de evento (sucesso/erro) ficam DENTRO do dialog para aparecerem acima do modal -->
+    <div class="evento" id="msgEvento" role="status" aria-live="polite" hidden></div>
+
     <form id="loginForm" class="form" data-panel="login" novalidate>
-      <label class="field"><span>E-mail</span><input type="email" name="email" required autocomplete="email"></label>
-      <label class="field"><span>Senha</span><input type="password" name="senha" required autocomplete="current-password"></label>
+      <label class="field"><span>Usuário</span><input type="text" name="usuario" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+      <label class="field"><span>Senha</span><input type="password" name="senha" data-senha required autocomplete="current-password"></label>
+      <label class="check"><input type="checkbox" class="mostrar-senha"> Mostrar senha</label>
       <p class="form-erro" id="loginErro" role="alert" hidden></p>
       <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+      <button class="link-btn" type="button" id="abrirRecuperar">Esqueci meu usuário ou senha</button>
     </form>
 
     <form id="cadastroForm" class="form" data-panel="cadastro" hidden novalidate>
-      <label class="field"><span>Nome completo</span><input type="text" name="nome" required autocomplete="name"></label>
-      <label class="field"><span>E-mail</span><input type="email" name="email" required autocomplete="email"></label>
-      <label class="field"><span>Senha (mínimo 6 caracteres)</span><input type="password" name="senha" required minlength="6" autocomplete="new-password"></label>
-      <label class="field"><span>Telefone com DDD</span><input type="tel" name="telefone" required inputmode="tel" placeholder="(21) 99999-0000" autocomplete="tel"></label>
-      <div class="row">
-        <label class="field"><span>Estado</span><select name="uf" id="cadUf" required></select></label>
-        <label class="field"><span>Cidade</span><select name="cidade" id="cadCidade" required></select></label>
-      </div>
+      <fieldset class="grupo">
+        <legend>Dados pessoais</legend>
+        <label class="field"><span>Nome completo *</span><input type="text" name="nome" required minlength="3" maxlength="60" autocomplete="name"></label>
+        <label class="field"><span>Nome materno *</span><input type="text" name="materno" required minlength="3" maxlength="60" autocomplete="off"></label>
+        <div class="row">
+          <label class="field"><span>Data de nascimento *</span><input type="date" name="nascimento" required min="1900-01-01" autocomplete="bday"></label>
+          <label class="field"><span>Gênero *</span>
+            <select name="genero" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="Feminino">Feminino</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Não binário">Não binário</option>
+              <option value="Outro">Outro</option>
+              <option value="Prefiro não informar">Prefiro não informar</option>
+            </select></label>
+        </div>
+        <label class="field"><span>Celular com DDD * <small>(não precisa ser fixo)</small></span>
+          <input type="tel" name="celular" required inputmode="tel" placeholder="(21) 99999-0000" maxlength="15" autocomplete="tel"></label>
+      </fieldset>
+
+      <fieldset class="grupo">
+        <legend>Endereço</legend>
+        <div class="cep-linha">
+          <label class="field"><span>CEP *</span><input type="text" name="cep" id="cadCep" required inputmode="numeric" placeholder="00000-000" maxlength="9" autocomplete="postal-code"></label>
+          <button class="btn btn-ghost" type="button" id="btnBuscarCep">Buscar CEP</button>
+        </div>
+        <p class="dica" id="cepMsg" role="status" aria-live="polite" hidden></p>
+        <label class="field"><span>Endereço (rua/avenida) *</span><input type="text" name="endereco" required maxlength="80" autocomplete="address-line1"></label>
+        <div class="row">
+          <label class="field"><span>Número *</span><input type="text" name="numero" required maxlength="10" inputmode="numeric" autocomplete="off"></label>
+          <label class="field"><span>Complemento</span><input type="text" name="complemento" maxlength="40" autocomplete="address-line2"></label>
+        </div>
+        <label class="field"><span>Bairro *</span><input type="text" name="bairro" required maxlength="60"></label>
+        <div class="row">
+          <label class="field"><span>Estado *</span><select name="uf" id="cadUf" required></select></label>
+          <label class="field"><span>Cidade *</span><select name="cidade" id="cadCidade" required></select></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="grupo">
+        <legend>Acesso</legend>
+        <label class="field"><span>Usuário * <small>(4 a 20 letras, números, . ou _)</small></span>
+          <input type="text" name="usuario" required minlength="4" maxlength="20" pattern="[A-Za-z0-9._]{4,20}" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+        <label class="field"><span>Senha * <small>(mínimo 6 caracteres)</small></span>
+          <input type="password" name="senha" id="cadSenha" data-senha required minlength="6" autocomplete="new-password"></label>
+        <div class="forca" id="forca" data-nivel="0" aria-live="polite">
+          <div class="forca-barra" aria-hidden="true"><i></i><i></i><i></i></div>
+          <p class="forca-txt" id="forcaTxt">Crie uma senha forte: misture letras maiúsculas e minúsculas, números e símbolos.</p>
+        </div>
+        <label class="field"><span>Confirmar senha *</span>
+          <input type="password" name="confirmar" id="cadConfirmar" data-senha required minlength="6" autocomplete="new-password"></label>
+        <p class="dica" id="confirmaMsg" aria-live="polite" hidden></p>
+        <label class="check"><input type="checkbox" class="mostrar-senha"> Mostrar senha</label>
+      </fieldset>
+
       <p class="form-erro" id="cadErro" role="alert" hidden></p>
       <button class="btn btn-primary btn-block" type="submit">Criar conta</button>
+    </form>
+
+    <form id="recuperarForm" class="form" data-panel="recuperar" hidden novalidate>
+      <h3 class="rec-titulo">Recuperar usuário ou senha</h3>
+      <p class="hint">Confirme seus dados para ver seu usuário. Se também esqueceu a senha, defina uma nova abaixo.</p>
+      <label class="field"><span>Nome materno *</span><input type="text" name="materno" required autocomplete="off"></label>
+      <div class="row">
+        <label class="field"><span>Data de nascimento *</span><input type="date" name="nascimento" required></label>
+        <label class="field"><span>Celular *</span><input type="tel" name="celular" required inputmode="tel" placeholder="(21) 99999-0000" maxlength="15"></label>
+      </div>
+      <label class="field"><span>Nova senha <small>(opcional, mínimo 6 caracteres)</small></span>
+        <input type="password" name="novaSenha" data-senha minlength="6" autocomplete="new-password"></label>
+      <label class="check"><input type="checkbox" class="mostrar-senha"> Mostrar senha</label>
+      <p class="form-erro" id="recErro" role="alert" hidden></p>
+      <p class="rec-ok" id="recOk" role="status" hidden></p>
+      <button class="btn btn-primary btn-block" type="submit">Recuperar</button>
+      <button class="link-btn" type="button" id="voltarLogin">Voltar para o login</button>
     </form>
   </dialog>
 
@@ -345,6 +415,10 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <div class="evento evento-global" id="msgGlobal" role="status" aria-live="polite" hidden></div>
+
+  <!-- cadastro.js vem ANTES do script.js para assumir login/cadastro -->
+  <script src="js/cadastro.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>
