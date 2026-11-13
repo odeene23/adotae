@@ -249,10 +249,17 @@ function alternarFavorito(id) {
 $('#chipsEspecie').addEventListener('click', e => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
-  $$('.chip', $('#chipsEspecie')).forEach(c => c.classList.toggle('on', c === chip));
+  $('.chip', $('#chipsEspecie')).forEach(c => c.classList.toggle('on', c === chip));
   filtros.especie = chip.dataset.especie;
   renderizar();
 });
+
+// Atalhos de espécie disponíveis no submenu "Adotar".
+$('[data-nav-especie]').forEach(link => link.addEventListener('click', () => {
+  filtros.especie = link.dataset.navEspecie;
+  $('.chip', $('#chipsEspecie')).forEach(chip => chip.classList.toggle('on', chip.dataset.especie === filtros.especie));
+  renderizar();
+}));
 $$('input[name="tipo"]', $('#filtros')).forEach(r => r.addEventListener('change', () => { filtros.tipo = r.value; renderizar(); }));
 $('#filtroIdade').addEventListener('change', e => { filtros.idade = e.target.value; renderizar(); });
 $('#filtroVacina').addEventListener('change', e => { filtros.vacinado = e.target.checked; renderizar(); });
@@ -464,4 +471,4 @@ try {
 } catch (e) { localStorage.removeItem('adotae_boas_vindas'); }
 
 /* abre direto o animal se o link tiver #pet-... (compartilhamento) */
-if (location.hash.startsWith('#pet-')) abrirDetalhe(location.hash.slice(5));
+if (location.hash.startsWith('#pet-')) { try { abrirDetalhe(decodeURIComponent(location.hash.slice(5))); } catch (e) { abrirDetalhe(location.hash.slice(5)); } }
