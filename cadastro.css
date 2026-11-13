@@ -234,3 +234,43 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
 .account-favorite { display:flex; align-items:center; gap:.65rem; padding:.8rem; background:var(--bg); border:1px solid var(--line); border-radius:12px; }
 .account-paw { font-size:1.4rem; }
 @media(max-width:560px) { .account-data { grid-template-columns:1fr; } }
+
+
+/* ---------- interação de interesse na adoção ---------- */
+.adoption-action { margin: 1.1rem 0; }
+.btn-adopt { width: 100%; justify-content: center; font-weight: 900; gap: .5rem; }
+.adoption-celebration {
+  display: grid;
+  justify-items: center;
+  gap: .35rem;
+  padding: 1.15rem;
+  border: 1px solid rgba(22, 163, 74, .3);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ecfdf5, #fef3c7);
+  color: #14532d;
+  text-align: center;
+  overflow: hidden;
+}
+.adoption-celebration[hidden] { display: none; }
+.adoption-celebration strong { font: 800 1.35rem 'Baloo 2', sans-serif; }
+.adoption-celebration span:last-child { font-weight: 800; }
+.celebration-paws { font-size: 1.65rem; letter-spacing: .25rem; }
+.adoption-celebration.celebrate { animation: adotae-pop .65s cubic-bezier(.2,.8,.2,1) both; }
+.adoption-celebration.celebrate .celebration-paws { animation: adotae-paws 1s ease-in-out both; }
+@keyframes adotae-pop {
+  0% { opacity: 0; transform: scale(.72) translateY(12px); }
+  65% { opacity: 1; transform: scale(1.04) translateY(-3px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes adotae-paws {
+  0%,100% { transform: translateY(0) rotate(0); }
+  35% { transform: translateY(-9px) rotate(-8deg); }
+  70% { transform: translateY(0) rotate(8deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adoption-celebration.celebrate, .adoption-celebration.celebrate .celebration-paws { animation: none; }
+}
+@media (max-width: 520px) {
+  .adoption-celebration { padding: .9rem .65rem; }
+  .adoption-celebration strong { font-size: 1.2rem; }
+}
