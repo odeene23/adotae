@@ -528,24 +528,67 @@
       return '<div class="account-data-item"><span>' + item[0] + '</span><strong>' + String(item[1]).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</strong></div>';
     }).join('');
 
-    var favoritos = [];
-    var pets = [];
-    try { favoritos = JSON.parse(localStorage.getItem('adotae_favs') || '[]'); } catch (e) {}
-    try { pets = JSON.parse(localStorage.getItem('adotae_pets') || '[]'); } catch (e) {}
-    var exemplos = {
-      ex1:'Hulk', ex2:'Mia', ex3:'Bolt', ex4:'Manequinho',
-      ex5:'Pipoca', ex6:'Fred', ex7:'Luna',
-      ex8:'Procuro um cachorro de porte médio'
-    };
-    var todos = pets.concat(Object.keys(exemplos).map(function (id) { return {id:id,nome:exemplos[id]}; }));
-    var escolhidos = favoritos.map(function (id) {
-      return todos.filter(function (pet) { return String(pet.id) === String(id); })[0] || {id:id,nome:'Animal favoritado'};
-    });
+    function escaparHTML(valor) {
+      return String(valor == null ? '' : valor).replace(/[&<>"']/g, function (c) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+      });
+    }
+
+    // Lê a mesma chave usada pela página inicial e normaliza dados antigos.
+    function lerFavoritos() {
+      try {
+        var lista = JSON.parse(localStorage.getItem('adotae_favs') || '[]');
+        return Array.isArray(lista) ? lista.map(String).filter(Boolean) : [];
+      } catch (e) { return []; }
+    }
+    function renderizarFavoritos() {
+      var favoritos = Array.from(new Set(lerFavoritos()));
+      var pets = [];
+      try {
+        var salvos = JSON.parse(localStorage.getItem('adotae_pets') || '[]');
+        pets = Array.isArray(salvos) ? salvos : [];
+      } catch (e) { pets = []; }
+
+      var exemplos = [
+        {id:'ex1',nome:'Hulk',especie:'Cachorro',cidade:'Rio de Janeiro - RJ'},
+        {id:'ex2',nome:'Mia',especie:'Gato',cidade:'Niterói - RJ'},
+        {id:'ex3',nome:'Bolt',especie:'Cachorro',cidade:'Campinas - SP'},
+        {id:'ex4',nome:'Manequinho',especie:'Gato',cidade:'São Paulo - SP'},
+        {id:'ex5',nome:'Pipoca',especie:'Outro',cidade:'Belo Horizonte - MG'},
+        {id:'ex6',nome:'Fred',especie:'Cachorro',cidade:'Curitiba - PR'},
+        {id:'ex7',nome:'Luna',especie:'Cachorro',cidade:'Salvador - BA'},
+        {id:'ex8',nome:'Procuro um cachorro de porte médio',especie:'Procura',cidade:'Recife - PE'}
+      ];
+      var mapa = {};
+      pets.concat(exemplos).forEach(function (pet) {
+        if (pet && pet.id != null && !mapa[String(pet.id)]) mapa[String(pet.id)] = pet;
+      });
+      var areaFav = $('#favoritosConta');
+      if (!favoritos.length) {
+        areaFav.innerHTML = '<div class="favorites-empty"><span aria-hidden="true">♡</span><strong>Seus favoritos aparecerão aqui</strong><p>Toque no coração de um animal para guardá-lo nesta lista.</p><a class="btn btn-primary" href="index.html#animais">Encontrar um companheiro</a></div>';
+        return;
+      }
+      areaFav.innerHTML = favoritos.map(function (id) {
+        var pet = mapa[id] || {id:id,nome:'Animal não disponível',especie:'Anúncio removido',cidade:'Este anúncio não está mais disponível'};
+        var nome = escaparHTML(pet.nome || 'Animal');
+        var especie = escaparHTML(pet.especie || pet.raca || 'Pet');
+        var cidade = escaparHTML(pet.cidade || pet.uf || 'Local não informado');
+        return '<article class="account-favorite">' +
+          '<a class="account-favorite-link" href="index.html#pet-' + encodeURIComponent(id) + '">' +
+          '<span class="account-paw" aria-hidden="true">🐾</span><span class="account-favorite-info"><strong>' + nome + '</strong><small>' + especie + ' · ' + cidade + '</small></span></a>' +
+          '<button class="account-favorite-remove" type="button" data-remover-favorito="' + escaparHTML(id) + '" aria-label="Remover ' + nome + ' dos favoritos" title="Remover dos favoritos">×</button></article>';
+      }).join('');
+    }
     var areaFav = $('#favoritosConta');
-    areaFav.innerHTML = escolhidos.length ? escolhidos.map(function (pet) {
-      var nome = String(pet.nome || 'Animal').replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
-      return '<article class="account-favorite"><span class="account-paw" aria-hidden="true">🐾</span><strong>' + nome + '</strong></article>';
-    }).join('') : '<p class="hint">Você ainda não favoritou nenhum animal. Explore os animais na página inicial e toque no coração para salvá-los aqui.</p>';
+    renderizarFavoritos();
+    areaFav.addEventListener('click', function (e) {
+      var botao = e.target.closest('[data-remover-favorito]');
+      if (!botao) return;
+      var id = botao.getAttribute('data-remover-favorito');
+      var atualizados = Array.from(new Set(lerFavoritos())).filter(function (item) { return item !== id; });
+      try { localStorage.setItem('adotae_favs', JSON.stringify(atualizados)); } catch (err) {}
+      renderizarFavoritos();
+    });
 
     $('#sairConta').addEventListener('click', function () {
       try {
