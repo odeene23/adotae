@@ -99,7 +99,7 @@
   }
 
   document.addEventListener('cadastro:sucesso', function () {
-    mostrarMensagem('Cadastro realizado com sucesso', 'ok');
+    mostrarToast('Cadastro realizado com sucesso');
   });
 
   var toastTimer;
@@ -404,7 +404,6 @@
       $('#cepMsg').hidden = true;
       formLogin.elements.usuario.value = usuario;
       mostrarPainel('login');
-      mostrarToast('Cadastro realizado com sucesso');
       emitir('cadastro:sucesso', { usuario: usuario, nome: nome });
     });
   });
@@ -550,8 +549,6 @@
     $('#sairConta').addEventListener('click', function () {
       try {
         localStorage.removeItem(KEY_SESSAO);
-        localStorage.removeItem('adotae_usuario');
-        localStorage.removeItem('adotae_usuario');
         localStorage.removeItem('adotae_usuario');
       } catch (e) {}
       window.location.href = 'index.html';
