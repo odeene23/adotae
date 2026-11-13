@@ -297,7 +297,7 @@ $('#limparFiltros').addEventListener('click', () => {
   $('#filtroVacina').checked = false;
   $('#filtroFav').checked = false;
   $('input[name="tipo"][value=""]', $('#filtros')).checked = true;
-  $$$('.chip', $('#chipsEspecie')).forEach((c, i) => c.classList.toggle('on', i === 0));
+  $('.chip', $('#chipsEspecie')).forEach((c, i) => c.classList.toggle('on', i === 0));
   renderizar();
 });
 
@@ -451,7 +451,14 @@ function atualizarConta() {
 }
 
 if ($('#btnConta')) $('#btnConta').href = 'acesso.html';
-function concluirSaida() { try { localStorage.clear(); sessionStorage.clear(); } catch (e) {} window.location.href = 'index.html'; }
+function concluirSaida() {
+  try {
+    // Mantém anúncios e favoritos: são dados do site, não apenas da sessão.
+    ['adotae_sessao', 'adotae_usuario', 'adotae_usuario_logado', 'adotae_lembrar', 'adotae_boas_vindas'].forEach(k => localStorage.removeItem(k));
+    sessionStorage.clear();
+  } catch (e) {}
+  window.location.href = 'index.html';
+}
 function solicitarSaida() {
   let lembrar = false;
   try { lembrar = localStorage.getItem('adotae_lembrar') === 'true'; } catch (e) {}
