@@ -371,3 +371,15 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
   .nav-group[open] { flex-basis: 100%; }
   .tools { justify-content: center; }
 }
+
+/* ---------- menu Início e confirmação de saída ---------- */
+.nav-home-group > summary, .auth-home-menu > summary { font-weight: 900; }
+.auth-home-menu { position: relative; }
+.auth-home-menu .nav-submenu { right: 0; left: auto; }
+.logout-dialog { width: min(520px, 92vw); border: 1px solid var(--line); border-radius: 18px; padding: 1.4rem; background: var(--surface); color: var(--ink); box-shadow: 0 20px 60px rgba(0,0,0,.28); }
+.logout-dialog::backdrop { background: rgba(15,23,42,.62); backdrop-filter: blur(3px); }
+.logout-dialog h2 { margin: 0 0 .5rem; font-family: var(--font-title); }
+.logout-dialog p { line-height: 1.55; }
+.logout-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .65rem; margin-top: 1.2rem; }
+.remember-toggle { margin: .15rem 0 .25rem; }
+@media(max-width:600px) { .logout-actions { flex-direction: column-reverse; } .logout-actions .btn { width: 100%; } .auth-home-menu { margin-left: auto; } }
