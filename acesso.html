@@ -129,8 +129,23 @@
     </form>
   </section>
 
+  <section class="modal account-card" id="minhaConta" hidden aria-labelledby="contaTitulo">
+    <div class="account-heading">
+      <div><p class="account-eyebrow">ÁREA DO USUÁRIO</p><h2 id="contaTitulo">Minha conta</h2><p class="hint">Seus dados cadastrados e seus animais favoritos.</p></div>
+      <a class="btn btn-ghost" href="index.html">Voltar ao início</a>
+    </div>
+    <section class="account-section" aria-labelledby="dadosContaTitulo">
+      <h3 id="dadosContaTitulo">Meus dados</h3>
+      <div class="account-data" id="dadosConta"></div>
+    </section>
+    <section class="account-section" aria-labelledby="favoritosContaTitulo">
+      <h3 id="favoritosContaTitulo">Animais favoritados</h3>
+      <div class="account-favorites" id="favoritosConta"></div>
+    </section>
+    <button class="btn btn-ghost btn-block" id="sairConta" type="button">Sair da conta</button>
+  </section>
 
-    <div class="evento evento-global" id="msgGlobal" role="status" aria-live="polite" hidden></div>
+  <div class="evento evento-global" id="msgGlobal" role="status" aria-live="polite" hidden></div>
   </main>
   <script src="cadastro.js"></script>
 </body>
