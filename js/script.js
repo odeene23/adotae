@@ -428,14 +428,22 @@ function atualizarConta() {
 }
 
 if ($('#btnConta')) $('#btnConta').href = 'acesso.html';
-if ($('#btnSair')) $('#btnSair').addEventListener('click', () => {
-  usuario = null;
-  store.set('usuario', null);
-  localStorage.removeItem('adotae_sessao');
-  localStorage.removeItem('adotae_usuario');
-  atualizarConta();
-  toast('Você saiu da conta');
-});
+function concluirSaida() { try { localStorage.clear(); sessionStorage.clear(); } catch (e) {} window.location.href = 'index.html'; }
+function solicitarSaida() {
+  let lembrar = false;
+  try { lembrar = localStorage.getItem('adotae_lembrar') === 'true'; } catch (e) {}
+  if (!lembrar) { concluirSaida(); return; }
+  const dialogo = $('#logoutConfirm');
+  if (dialogo && typeof dialogo.showModal === 'function') dialogo.showModal();
+  else if (window.confirm('O site será encerrado e todos os dados salvos neste navegador serão apagados. Deseja continuar?')) concluirSaida();
+}
+const dialogoSaida = $('#logoutConfirm');
+if (dialogoSaida) {
+  $('[data-confirm-logout]', dialogoSaida)?.addEventListener('click', concluirSaida);
+  $('[data-cancel-logout]', dialogoSaida)?.addEventListener('click', () => dialogoSaida.close());
+  dialogoSaida.addEventListener('click', e => { if (e.target === dialogoSaida) dialogoSaida.close(); });
+}
+if ($('#btnSair')) $('#btnSair').addEventListener('click', solicitarSaida);
 
 function entrar(u) {
   usuario = { id: u.id, nome: u.nome, email: u.email || '', telefone: u.telefone || u.celular || '', uf: u.uf || '', cidade: u.cidade || '' };
