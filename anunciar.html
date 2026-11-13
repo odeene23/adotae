@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="cadastro.css"></head>
 <body class="auth-page announce-page">
-<header class="auth-header"><a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a><nav class="announce-nav"><a href="index.html">Procurar animais</a><a href="acesso.html">Minha conta</a></nav></header>
+<header class="auth-header"><a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a><nav class="announce-nav"><a href="index.html">Início</a><a href="acesso.html">Minha conta</a><button class="btn btn-ghost" id="btnSairAnuncio" type="button">Sair</button></nav></header>
 <main class="auth-main announce-main"><h1>Ajude um animal a encontrar um lar</h1><p class="announce-intro">Publique um animal para adoção ou conte à comunidade qual amigo você procura.</p>
   <section class="announce-card" aria-labelledby="anuncioTitulo">
     <h2 id="anuncioTitulo">Novo anúncio</h2>
@@ -98,5 +98,5 @@
     </form>
   </section>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div><dialog class="modal logout-dialog" id="logoutConfirm" aria-labelledby="logoutTitulo"><h2 id="logoutTitulo">Deseja realmente sair?</h2><p>O site será encerrado e todos os dados salvos neste navegador serão apagados. Essa ação não poderá ser desfeita.</p><div class="logout-actions"><button class="btn btn-ghost" type="button" data-cancel-logout>Cancelar</button><button class="btn btn-primary" type="button" data-confirm-logout>Quero continuar assim mesmo</button></div></dialog></main>
 <script src="anunciar.js"></script></body></html>
