@@ -14,7 +14,7 @@
 <body class="auth-page" data-auth-page="login">
   <header class="auth-header">
     <a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a>
-    <a class="btn btn-ghost" href="index.html">Voltar ao início</a>
+    <details class="nav-group auth-home-menu"><summary>Início ▾</summary><div class="nav-submenu"><a href="index.html#topo">Página inicial</a><a href="index.html#animais">Todos os animais</a><a href="index.html#porque">Adoção responsável</a><a href="index.html#sobre">Como funciona</a><a href="index.html#contato">Fale com a gente</a><a href="acesso.html">Minha conta e favoritos</a><a href="anunciar.html">Publicar um anúncio</a></div></details>
   </header>
   <main class="auth-main">
       <section class="modal auth-card" id="auth" aria-labelledby="authTitulo">
@@ -27,6 +27,7 @@
     <form id="loginForm" class="form" data-panel="login" novalidate>
       <label class="field"><span>Usuário</span><input type="text" name="usuario" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
       <label class="field"><span>Senha</span><input type="password" name="senha" data-senha required autocomplete="current-password"></label>
+      <label class="show-password-toggle remember-toggle"><input type="checkbox" name="lembrar" id="lembrarDeMim"><span class="show-password-switch" aria-hidden="true"></span><span class="show-password-text">Lembrar de mim</span></label>
       <label class="show-password-toggle">
         <input type="checkbox" class="mostrar-senha">
         <span class="show-password-switch" aria-hidden="true"></span>
@@ -145,6 +146,7 @@
     <button class="btn btn-ghost btn-block" id="sairConta" type="button">Sair da conta</button>
   </section>
 
+  <dialog class="modal logout-dialog" id="logoutConfirm" aria-labelledby="logoutTitulo"><h2 id="logoutTitulo">Deseja realmente sair?</h2><p>O site será encerrado e todos os dados salvos neste navegador serão apagados. Essa ação não poderá ser desfeita.</p><div class="logout-actions"><button class="btn btn-ghost" type="button" data-cancel-logout>Cancelar</button><button class="btn btn-primary" type="button" data-confirm-logout>Quero continuar assim mesmo</button></div></dialog>
   <div class="evento evento-global" id="msgGlobal" role="status" aria-live="polite" hidden></div>
   </main>
   <script src="cadastro.js"></script>
