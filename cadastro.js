@@ -426,6 +426,13 @@
     if (dialogo && typeof dialogo.showModal === 'function') dialogo.showModal();
     else if (window.confirm('O site será encerrado e todos os dados salvos neste navegador serão apagados. Deseja continuar?')) concluirSaida();
   }
+  // Se houver mais de um menu suspenso nesta página, mantém só um aberto.
+  $('.nav-group').forEach(function (grupo) {
+    grupo.addEventListener('toggle', function () {
+      if (!grupo.open) return;
+      $('.nav-group').forEach(function (outro) { if (outro !== grupo) outro.open = false; });
+    });
+  });
   var dialogoSaida = $('#logoutConfirm');
   if (dialogoSaida) {
     $('[data-confirm-logout]', dialogoSaida)?.addEventListener('click', concluirSaida);
