@@ -13,6 +13,7 @@
   if(dlg&&typeof dlg.showModal==='function')dlg.showModal();
   else if(confirm('O site será encerrado e todos os dados salvos neste navegador serão apagados. Deseja continuar?'))concluirSaida();
  }
+ $('.nav-group').forEach(grupo=>grupo.addEventListener('toggle',()=>{if(!grupo.open)return;$('.nav-group').forEach(outro=>{if(outro!==grupo)outro.open=false;});}));
  const dlgSaida=$('#logoutConfirm');
  if(dlgSaida){
   $('[data-confirm-logout]',dlgSaida)?.addEventListener('click',concluirSaida);
