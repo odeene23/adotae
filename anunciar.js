@@ -5,6 +5,21 @@
  const toast=m=>{toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toastEl.classList.remove('show'),4000);};
  const read=(k,d)=>{try{return JSON.parse(localStorage.getItem('adotae_'+k))??d;}catch{return d;}};
  const save=(k,v)=>{try{localStorage.setItem('adotae_'+k,JSON.stringify(v));return true;}catch{toast('Não foi possível salvar. Tente uma foto menor.');return false;}};
+ function concluirSaida(){try{localStorage.clear();sessionStorage.clear();}catch(e){}location.href='index.html';}
+ function solicitarSaida(){
+  let lembrar=false;try{lembrar=localStorage.getItem('adotae_lembrar')==='true';}catch(e){}
+  if(!lembrar){concluirSaida();return;}
+  const dlg=$('#logoutConfirm');
+  if(dlg&&typeof dlg.showModal==='function')dlg.showModal();
+  else if(confirm('O site será encerrado e todos os dados salvos neste navegador serão apagados. Deseja continuar?'))concluirSaida();
+ }
+ const dlgSaida=$('#logoutConfirm');
+ if(dlgSaida){
+  $('[data-confirm-logout]',dlgSaida)?.addEventListener('click',concluirSaida);
+  $('[data-cancel-logout]',dlgSaida)?.addEventListener('click',()=>dlgSaida.close());
+  dlgSaida.addEventListener('click',e=>{if(e.target===dlgSaida)dlgSaida.close();});
+ }
+ $('#btnSairAnuncio')?.addEventListener('click',solicitarSaida);
  const user=read('usuario',null), session=localStorage.getItem('adotae_sessao');
  if(!user||!session){alert('Entre na sua conta para publicar um anúncio.');location.replace('acesso.html');return;}
  const digits=v=>String(v||'').replace(/\D/g,'');
