@@ -262,25 +262,25 @@ function alternarFavorito(id) {
 $('#chipsEspecie').addEventListener('click', e => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
-  $('.chip', $('#chipsEspecie')).forEach(c => c.classList.toggle('on', c === chip));
+  $$('.chip', $('#chipsEspecie')).forEach(c => c.classList.toggle('on', c === chip));
   filtros.especie = chip.dataset.especie;
   renderizar();
 });
 
 // Mantém apenas um submenu de navegação aberto por vez.
-$('.nav-group').forEach(grupo => {
+$$('.nav-group').forEach(grupo => {
   grupo.addEventListener('toggle', () => {
     if (!grupo.open) return;
-    $('.nav-group').forEach(outro => {
+    $$('.nav-group').forEach(outro => {
       if (outro !== grupo) outro.open = false;
     });
   });
 });
 
 // Atalhos de espécie disponíveis no submenu "Adotar".
-$('[data-nav-especie]').forEach(link => link.addEventListener('click', () => {
+$$('[data-nav-especie]').forEach(link => link.addEventListener('click', () => {
   filtros.especie = link.dataset.navEspecie;
-  $('.chip', $('#chipsEspecie')).forEach(chip => chip.classList.toggle('on', chip.dataset.especie === filtros.especie));
+  $$('.chip', $('#chipsEspecie')).forEach(chip => chip.classList.toggle('on', chip.dataset.especie === filtros.especie));
   renderizar();
 }));
 $$('input[name="tipo"]', $('#filtros')).forEach(r => r.addEventListener('change', () => { filtros.tipo = r.value; renderizar(); }));
@@ -297,7 +297,7 @@ $('#limparFiltros').addEventListener('click', () => {
   $('#filtroVacina').checked = false;
   $('#filtroFav').checked = false;
   $('input[name="tipo"][value=""]', $('#filtros')).checked = true;
-  $$('.chip', $('#chipsEspecie')).forEach((c, i) => c.classList.toggle('on', i === 0));
+  $$$('.chip', $('#chipsEspecie')).forEach((c, i) => c.classList.toggle('on', i === 0));
   renderizar();
 });
 
