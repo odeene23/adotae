@@ -99,8 +99,18 @@
   }
 
   document.addEventListener('cadastro:sucesso', function () {
-    mostrarMensagem('Cadastro realizado com sucesso! Agora você já pode entrar.', 'ok');
+    mostrarMensagem('Cadastro realizado com sucesso', 'ok');
   });
+
+  var toastTimer;
+  function mostrarToast(texto) {
+    var alvo = $('#toast');
+    if (!alvo) return;
+    alvo.textContent = texto;
+    alvo.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { alvo.classList.remove('show'); }, 3500);
+  }
   document.addEventListener('cep:erro', function () {
     mostrarMensagem('falha na consulta', 'erro');
     var msg = $('#cepMsg');
@@ -329,9 +339,8 @@
     erroCad('');
     var f = formCad.elements;
 
-    // alert pedido: usuário, nome e endereço
     if (!f.usuario.value.trim() || !f.nome.value.trim() || !f.endereco.value.trim()) {
-      alert('Preencha usuário, nome e endereço.');
+      erroCad('Preencha usuário, nome e endereço.');
       (!f.usuario.value.trim() ? f.usuario : (!f.nome.value.trim() ? f.nome : f.endereco)).focus();
       return;
     }
@@ -395,7 +404,7 @@
       $('#cepMsg').hidden = true;
       formLogin.elements.usuario.value = usuario;
       mostrarPainel('login');
-      mostrarMensagem('Cadastro realizado com sucesso! Agora você já pode entrar.', 'ok');
+      mostrarToast('Cadastro realizado com sucesso');
       emitir('cadastro:sucesso', { usuario: usuario, nome: nome });
     });
   });
@@ -487,6 +496,68 @@
       concluir('. Sua senha foi redefinida, já pode entrar.');
     });
   });
+
+
+  /* ---------- MINHA CONTA ---------- */
+  function carregarMinhaConta() {
+    var sessao = '';
+    try { sessao = localStorage.getItem(KEY_SESSAO) || ''; } catch (e) {}
+    if (!sessao) return;
+    var usuarioAtual = lerUsuarios().filter(function (u) { return u.usuario === sessao; })[0];
+    if (!usuarioAtual) return;
+
+    var painelAuth = $('#auth');
+    var painelConta = $('#minhaConta');
+    if (!painelAuth || !painelConta) return;
+    painelAuth.hidden = true;
+    painelConta.hidden = false;
+
+    var end = usuarioAtual.endereco || {};
+    var dados = [
+      ['Nome completo', usuarioAtual.nome],
+      ['Usuário', usuarioAtual.usuario],
+      ['Data de nascimento', usuarioAtual.nascimento ? usuarioAtual.nascimento.split('-').reverse().join('/') : 'Não informado'],
+      ['Gênero', usuarioAtual.genero || 'Não informado'],
+      ['Celular', usuarioAtual.celular || 'Não informado'],
+      ['CEP', end.cep || 'Não informado'],
+      ['Endereço', [end.logradouro, end.numero, end.complemento].filter(Boolean).join(', ') || 'Não informado'],
+      ['Bairro', end.bairro || 'Não informado'],
+      ['Cidade/Estado', [end.cidade, end.uf].filter(Boolean).join(' / ') || 'Não informado']
+    ];
+    $('#dadosConta').innerHTML = dados.map(function (item) {
+      return '<div class="account-data-item"><span>' + item[0] + '</span><strong>' + String(item[1]).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</strong></div>';
+    }).join('');
+
+    var favoritos = [];
+    var pets = [];
+    try { favoritos = JSON.parse(localStorage.getItem('adotae_favs') || '[]'); } catch (e) {}
+    try { pets = JSON.parse(localStorage.getItem('adotae_pets') || '[]'); } catch (e) {}
+    var exemplos = {
+      ex1:'Hulk', ex2:'Mia', ex3:'Bolt', ex4:'Manequinho',
+      ex5:'Pipoca', ex6:'Fred', ex7:'Luna',
+      ex8:'Procuro um cachorro de porte médio'
+    };
+    var todos = pets.concat(Object.keys(exemplos).map(function (id) { return {id:id,nome:exemplos[id]}; }));
+    var escolhidos = favoritos.map(function (id) {
+      return todos.filter(function (pet) { return String(pet.id) === String(id); })[0] || {id:id,nome:'Animal favoritado'};
+    });
+    var areaFav = $('#favoritosConta');
+    areaFav.innerHTML = escolhidos.length ? escolhidos.map(function (pet) {
+      var nome = String(pet.nome || 'Animal').replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+      return '<article class="account-favorite"><span class="account-paw" aria-hidden="true">🐾</span><strong>' + nome + '</strong></article>';
+    }).join('') : '<p class="hint">Você ainda não favoritou nenhum animal. Explore os animais na página inicial e toque no coração para salvá-los aqui.</p>';
+
+    $('#sairConta').addEventListener('click', function () {
+      try {
+        localStorage.removeItem(KEY_SESSAO);
+        localStorage.removeItem('adotae_usuario');
+        localStorage.removeItem('adotae_usuario');
+        localStorage.removeItem('adotae_usuario');
+      } catch (e) {}
+      window.location.href = 'index.html';
+    });
+  }
+  carregarMinhaConta();
 
   /* ---------- data de nascimento: não aceitar datas futuras ---------- */
   var hoje = new Date();
