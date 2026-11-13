@@ -437,7 +437,8 @@
       try { localStorage.setItem(KEY_SESSAO, user.usuario); } catch (err) { /* ignora */ }
       formLogin.reset();
       aplicarSessao();
-      try { localStorage.setItem('adotae_usuario', JSON.stringify({ id:user.usuario, nome:user.nome, usuario:user.usuario, telefone:user.celular||'', celular:user.celular||'', email:'', uf:user.endereco&&user.endereco.uf||'', cidade:user.endereco&&user.endereco.cidade||'', endereco:user.endereco||{} })); } catch (err) { /* ignora */ }
+      try { localStorage.setItem('adotae_usuario', JSON.stringify({ id:user.usuario, nome:user.nome, usuario:user.usuario, genero:user.genero||'', telefone:user.celular||'', celular:user.celular||'', email:'', uf:user.endereco&&user.endereco.uf||'', cidade:user.endereco&&user.endereco.cidade||'', endereco:user.endereco||{} })); } catch (err) { /* ignora */ }
+      try { localStorage.setItem('adotae_boas_vindas', JSON.stringify({ nome:user.nome, genero:user.genero||'' })); } catch (err) { /* ignora */ }
       emitir('login:sucesso', { usuario: user.usuario, nome: user.nome });
       window.location.href = 'index.html';
     });
