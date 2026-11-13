@@ -331,6 +331,7 @@ function abrirDetalhe(id) {
           <div class="full"><dt>${proc ? 'Aceita deficiência?' : 'Deficiência'}</dt><dd>${esc(defTxt)}</dd></div>
         </dl>
         <p class="det-desc">${esc(p.descricao)}</p>
+        ${!proc && !meu ? `<section class="adoption-action" aria-label="Demonstrar interesse na adoção"><button class="btn btn-primary btn-adopt" type="button" id="detQueroPet">💛 Eu quero esse pet</button><div class="adoption-celebration" id="detAdocaoSucesso" hidden role="status" aria-live="polite"><span class="celebration-paws" aria-hidden="true">🐾 ✨ 🐾</span><strong>Ótima escolha!</strong><span>Seu companheiro(a) está te esperando 💛</span></div></section>` : ''}
         <div class="det-actions">
           <button class="btn btn-ghost" type="button" id="detFav" data-fav-det="${p.id}"></button>
           <button class="btn btn-ghost" type="button" id="detShare"><svg class="ic"><use href="#i-share"/></svg>Compartilhar</button>
@@ -360,6 +361,18 @@ function atualizarBotaoFavDetalhe(id) {
 }
 
 dlgDetalhe.addEventListener('click', async e => {
+  if (e.target.closest('#detQueroPet')) {
+    const botao = $('#detQueroPet');
+    const celebracao = $('#detAdocaoSucesso');
+    if (botao && celebracao) {
+      botao.hidden = true;
+      celebracao.hidden = false;
+      celebracao.classList.remove('celebrate');
+      void celebracao.offsetWidth;
+      celebracao.classList.add('celebrate');
+    }
+    return;
+  }
   if (e.target.closest('#detFav')) return alternarFavorito(petAberto.id);
   if (e.target.closest('#detShare')) return compartilhar(petAberto);
   if (e.target.closest('#detRemover')) {
@@ -438,6 +451,17 @@ aplicarTema(tema);
 aplicarFonte();
 atualizarConta();
 renderizar();
+
+// Exibe a saudação uma única vez após o redirecionamento do login.
+try {
+  const boasVindas = JSON.parse(localStorage.getItem('adotae_boas_vindas') || 'null');
+  if (boasVindas && boasVindas.nome) {
+    localStorage.removeItem('adotae_boas_vindas');
+    const primeiroNome = boasVindas.nome.trim().split(/\\s+/)[0];
+    const saudacao = boasVindas.genero === 'Feminino' ? 'Seja bem-vinda' : boasVindas.genero === 'Masculino' ? 'Seja bem-vindo' : 'Que bom ter você';
+    toast(`Olá, ${primeiroNome}! ${saudacao} ao Adotaê!`);
+  }
+} catch (e) { localStorage.removeItem('adotae_boas_vindas'); }
 
 /* abre direto o animal se o link tiver #pet-... (compartilhamento) */
 if (location.hash.startsWith('#pet-')) abrirDetalhe(location.hash.slice(5));
