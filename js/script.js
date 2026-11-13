@@ -457,7 +457,7 @@ try {
   const boasVindas = JSON.parse(localStorage.getItem('adotae_boas_vindas') || 'null');
   if (boasVindas && boasVindas.nome) {
     localStorage.removeItem('adotae_boas_vindas');
-    const primeiroNome = boasVindas.nome.trim().split(/\\s+/)[0];
+    const primeiroNome = boasVindas.nome.trim().split(/\s+/)[0];
     const saudacao = boasVindas.genero === 'Feminino' ? 'Seja bem-vinda' : boasVindas.genero === 'Masculino' ? 'Seja bem-vindo' : 'Que bom ter você';
     toast(`Olá, ${primeiroNome}! ${saudacao} ao Adotaê!`);
   }
