@@ -68,7 +68,20 @@ const PETS_EXEMPLO = [
   { id: 'ex8', tipo: 'procura', nome: 'Procuro um cachorro de porte médio', especie: 'cachorro', raca: 'SRD', idadeMeses: 12, sexo: 'Tanto faz', porte: 'Médio', vacina: 'sim', deficiencia: 'sim', deficienciaDetalhe: 'Aceito animal com necessidades especiais', descricao: 'Moro em casa com quintal e trabalho meio período. Quero um companheiro para a família.', uf: 'PE', cidade: 'Recife', contato: { nome: 'Júlia Mendes', telefone: '(81) 99999-0008', email: 'julia@exemplo.com' }, foto: '' }
 ];
 
-const getPets = () => [...store.get('pets', []), ...PETS_EXEMPLO];
+// Protege a listagem contra dados ausentes ou corrompidos no LocalStorage.
+const getPets = () => {
+  const salvos = store.get('pets', []);
+  const personalizados = Array.isArray(salvos)
+    ? salvos.filter(p => p && typeof p === 'object' && p.id && p.nome && p.especie)
+    : [];
+  const vistos = new Set();
+  return [...personalizados, ...PETS_EXEMPLO].filter(p => {
+    const id = String(p.id);
+    if (vistos.has(id)) return false;
+    vistos.add(id);
+    return true;
+  });
+};
 let favs = new Set(store.get('favs', []));
 
 /* ---------- 3. ESTADOS E CIDADES ----------
@@ -252,6 +265,16 @@ $('#chipsEspecie').addEventListener('click', e => {
   $('.chip', $('#chipsEspecie')).forEach(c => c.classList.toggle('on', c === chip));
   filtros.especie = chip.dataset.especie;
   renderizar();
+});
+
+// Mantém apenas um submenu de navegação aberto por vez.
+$('.nav-group').forEach(grupo => {
+  grupo.addEventListener('toggle', () => {
+    if (!grupo.open) return;
+    $('.nav-group').forEach(outro => {
+      if (outro !== grupo) outro.open = false;
+    });
+  });
 });
 
 // Atalhos de espécie disponíveis no submenu "Adotar".
