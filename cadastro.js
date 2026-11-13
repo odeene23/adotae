@@ -417,6 +417,21 @@
   }
 
   var btnConta = $('#btnConta'), btnSair = $('#btnSair');
+  function concluirSaida() { try { localStorage.clear(); sessionStorage.clear(); } catch (e) {} window.location.href = 'index.html'; }
+  function solicitarSaida() {
+    var lembrar = false;
+    try { lembrar = localStorage.getItem('adotae_lembrar') === 'true'; } catch (e) {}
+    if (!lembrar) { concluirSaida(); return; }
+    var dialogo = $('#logoutConfirm');
+    if (dialogo && typeof dialogo.showModal === 'function') dialogo.showModal();
+    else if (window.confirm('O site será encerrado e todos os dados salvos neste navegador serão apagados. Deseja continuar?')) concluirSaida();
+  }
+  var dialogoSaida = $('#logoutConfirm');
+  if (dialogoSaida) {
+    $('[data-confirm-logout]', dialogoSaida)?.addEventListener('click', concluirSaida);
+    $('[data-cancel-logout]', dialogoSaida)?.addEventListener('click', function () { dialogoSaida.close(); });
+    dialogoSaida.addEventListener('click', function (e) { if (e.target === dialogoSaida) dialogoSaida.close(); });
+  }
   function aplicarSessao() {
     var logado = !!localStorage.getItem(KEY_SESSAO);
     if (btnConta) { btnConta.hidden = logado; }
@@ -434,7 +449,7 @@
     if (!user) { erroLogin('Usuário ou senha incorretos.'); return; }
     hashSenha(u, s).then(function (h) {
       if (h !== user.senha) { erroLogin('Usuário ou senha incorretos.'); return; }
-      try { localStorage.setItem(KEY_SESSAO, user.usuario); } catch (err) { /* ignora */ }
+      try { localStorage.setItem(KEY_SESSAO, user.usuario); localStorage.setItem('adotae_lembrar', formLogin.elements.lembrar && formLogin.elements.lembrar.checked ? 'true' : 'false'); } catch (err) { /* ignora */ }
       formLogin.reset();
       aplicarSessao();
       try { localStorage.setItem('adotae_usuario', JSON.stringify({ id:user.usuario, nome:user.nome, usuario:user.usuario, genero:user.genero||'', telefone:user.celular||'', celular:user.celular||'', email:'', uf:user.endereco&&user.endereco.uf||'', cidade:user.endereco&&user.endereco.cidade||'', endereco:user.endereco||{} })); } catch (err) { /* ignora */ }
@@ -444,12 +459,7 @@
     });
   });
 
-  if (btnSair) {
-    btnSair.addEventListener('click', function () {
-      try { localStorage.removeItem(KEY_SESSAO); } catch (err) { /* ignora */ }
-      aplicarSessao();
-    });
-  }
+  if (btnSair) btnSair.addEventListener('click', solicitarSaida);
   // depois que o script.js terminar de carregar
   window.addEventListener('load', aplicarSessao);
 
@@ -590,13 +600,8 @@
       renderizarFavoritos();
     });
 
-    $('#sairConta').addEventListener('click', function () {
-      try {
-        localStorage.removeItem(KEY_SESSAO);
-        localStorage.removeItem('adotae_usuario');
-      } catch (e) {}
-      window.location.href = 'index.html';
-    });
+    var botaoSairConta = $('#sairConta');
+    if (botaoSairConta) botaoSairConta.addEventListener('click', solicitarSaida);
   }
   carregarMinhaConta();
 
