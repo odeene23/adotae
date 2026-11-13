@@ -5,7 +5,13 @@
  const toast=m=>{toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toastEl.classList.remove('show'),4000);};
  const read=(k,d)=>{try{return JSON.parse(localStorage.getItem('adotae_'+k))??d;}catch{return d;}};
  const save=(k,v)=>{try{localStorage.setItem('adotae_'+k,JSON.stringify(v));return true;}catch{toast('Não foi possível salvar. Tente uma foto menor.');return false;}};
- function concluirSaida(){try{localStorage.clear();sessionStorage.clear();}catch(e){}location.href='index.html';}
+ function concluirSaida(){
+  try {
+   ['adotae_sessao','adotae_usuario','adotae_usuario_logado','adotae_lembrar','adotae_boas_vindas'].forEach(k=>localStorage.removeItem(k));
+   sessionStorage.clear();
+  } catch(e){}
+  location.href='index.html';
+ }
  function solicitarSaida(){
   let lembrar=false;try{lembrar=localStorage.getItem('adotae_lembrar')==='true';}catch(e){}
   if(!lembrar){concluirSaida();return;}
