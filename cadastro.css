@@ -218,3 +218,19 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
 .announce-nav{display:flex;gap:1rem;flex-wrap:wrap;}
 .announce-nav a{color:var(--blue);font-weight:800;text-decoration:none;}
 @media(max-width:600px){.date-dual-row{grid-template-columns:1fr;}.auth-header{flex-wrap:wrap;}}
+
+
+/* ---------- minha conta ---------- */
+.account-card { width: min(760px, 100% - 1.5rem); margin: 2rem auto; }
+.account-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; }
+.account-eyebrow { color:var(--blue); font-size:.78rem; font-weight:900; letter-spacing:.12em; margin:0 0 .25rem; }
+.account-section { border-top:1px solid var(--line); margin-top:1.3rem; padding-top:1.2rem; }
+.account-section h3 { margin:0 0 .85rem; font:800 1.2rem var(--font-title); }
+.account-data { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; }
+.account-data-item { min-width:0; padding:.75rem; border-radius:12px; background:var(--bg); display:grid; gap:.2rem; }
+.account-data-item span { color:var(--muted); font-size:.8rem; font-weight:700; }
+.account-data-item strong { overflow-wrap:anywhere; }
+.account-favorites { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.7rem; }
+.account-favorite { display:flex; align-items:center; gap:.65rem; padding:.8rem; background:var(--bg); border:1px solid var(--line); border-radius:12px; }
+.account-paw { font-size:1.4rem; }
+@media(max-width:560px) { .account-data { grid-template-columns:1fr; } }
