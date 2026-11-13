@@ -38,7 +38,7 @@
       </a>
 
       <nav class="nav" aria-label="Menu principal">
-        <a class="nav-home" href="#topo">Início</a>
+        <details class="nav-group nav-home-group"><summary>Início <span aria-hidden="true">▾</span></summary><div class="nav-submenu"><a href="#topo">Página inicial</a><a href="#animais">Todos os animais</a><a href="#animais" data-nav-especie="cachorro">Cachorros</a><a href="#animais" data-nav-especie="gato">Gatos</a><a href="#animais" data-nav-especie="outro">Outros animais</a><a href="#porque">Adoção responsável</a><a href="#sobre">Como funciona</a><a href="#contato">Fale com a gente</a><a href="acesso.html">Minha conta e favoritos</a><a href="anunciar.html">Publicar um anúncio</a></div></details>
         <details class="nav-group">
           <summary>Adotar <span aria-hidden="true">▾</span></summary>
           <div class="nav-submenu">
@@ -243,6 +243,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <dialog class="modal logout-dialog" id="logoutConfirm" aria-labelledby="logoutTitulo"><h2 id="logoutTitulo">Deseja realmente sair?</h2><p>O site será encerrado e todos os dados salvos neste navegador serão apagados. Essa ação não poderá ser desfeita.</p><div class="logout-actions"><button class="btn btn-ghost" type="button" data-cancel-logout>Cancelar</button><button class="btn btn-primary" type="button" data-confirm-logout>Quero continuar assim mesmo</button></div></dialog>
   <div class="evento evento-global" id="msgGlobal" role="status" aria-live="polite" hidden></div>
 
   <script src="js/script.js"></script>
