@@ -417,7 +417,13 @@
   }
 
   var btnConta = $('#btnConta'), btnSair = $('#btnSair');
-  function concluirSaida() { try { localStorage.clear(); sessionStorage.clear(); } catch (e) {} window.location.href = 'index.html'; }
+  function concluirSaida() {
+    try {
+      ['adotae_sessao', 'adotae_usuario', 'adotae_usuario_logado', 'adotae_lembrar', 'adotae_boas_vindas'].forEach(function (k) { localStorage.removeItem(k); });
+      sessionStorage.clear();
+    } catch (e) {}
+    window.location.href = 'index.html';
+  }
   function solicitarSaida() {
     var lembrar = false;
     try { lembrar = localStorage.getItem('adotae_lembrar') === 'true'; } catch (e) {}
