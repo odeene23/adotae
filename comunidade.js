@@ -1,0 +1,34 @@
+'use strict';
+(() => {
+ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)], KEY='adotae_comunidade_posts';
+ const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d;}catch{return d;}};
+ const write=v=>{try{localStorage.setItem(KEY,JSON.stringify(v));return true;}catch{toast('Não foi possível salvar. O armazenamento do navegador pode estar cheio.');return false;}};
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const labels={adocao:'Adoção',castracao:'Castração',veterinarios:'Veterinários',saude:'Saúde animal',resgate:'Resgate',dicas:'Dicas e cuidados',geral:'Geral'};
+ let filtro='todos',timer; const user=read('adotae_usuario',null),session=localStorage.getItem('adotae_sessao'),currentUser=user&&session?user:null;
+ function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>el.classList.remove('show'),3200);}
+ function posts(){const p=read(KEY,[]);return Array.isArray(p)?p.filter(x=>x&&x.id&&x.texto):[];}
+ function dataLabel(value){const d=new Date(value);return Number.isNaN(d.getTime())?'Agora':d.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});}
+ function render(){
+  const all=posts().sort((a,b)=>new Date(b.criadoEm)-new Date(a.criadoEm)),shown=filtro==='todos'?all:all.filter(p=>p.categoria===filtro);
+  $('#postCount').textContent=shown.length+' '+(shown.length===1?'publicação':'publicações');
+  if(!shown.length){$('#communityFeed').innerHTML='<div class="community-empty"><span>🐾</span><strong>'+(filtro==='todos'?'As conversas começam com você!':'Ainda não há publicações nesta categoria.')+'</strong><p>'+(filtro==='todos'?'Faça a primeira publicação e ajude a comunidade a crescer.':'Que tal iniciar uma conversa sobre esse assunto?')+'</p></div>';return;}
+  $('#communityFeed').innerHTML=shown.map(p=>{
+   const liked=currentUser&&(p.curtidas||[]).includes(currentUser.id),comments=Array.isArray(p.comentarios)?p.comentarios:[],local=p.cidade?[p.cidade,p.uf].filter(Boolean).join(' · '):'';
+   const commentHtml=comments.map(c=>'<div class="community-comment"><strong>'+esc(c.autor)+'</strong><span>'+esc(c.texto)+'</span>'+(currentUser&&c.autorId===currentUser.id?'<button type="button" data-action="delete-comment" data-id="'+esc(p.id)+'" data-comment-id="'+esc(c.id)+'" aria-label="Excluir comentário">×</button>':'')+'</div>').join('');
+   return '<article class="community-post" data-post-id="'+esc(p.id)+'"><div class="community-post-top"><div class="community-avatar">'+esc((p.autor||'?').trim().charAt(0).toUpperCase())+'</div><div class="community-author"><strong>'+esc(p.autor||'Pessoa da comunidade')+'</strong><span>'+esc(local)+(local?' · ':'')+esc(dataLabel(p.criadoEm))+'</span></div><span class="community-category">'+esc(labels[p.categoria]||'Geral')+'</span></div><p class="community-post-text">'+esc(p.texto).replace(/\\n/g,'<br>')+'</p><div class="community-post-actions"><button type="button" data-action="like" data-id="'+esc(p.id)+'" class="'+(liked?'liked':'')+'" aria-pressed="'+!!liked+'">♡ '+((p.curtidas||[]).length)+' curtidas</button><span>💬 '+comments.length+' '+(comments.length===1?'resposta':'respostas')+'</span>'+(currentUser&&p.autorId===currentUser.id?'<button type="button" data-action="delete" data-id="'+esc(p.id)+'" class="community-delete">Excluir</button>':'')+'</div><div class="community-comments">'+commentHtml+'<form class="community-comment-form" data-comment-form="'+esc(p.id)+'"><input name="comentario" maxlength="500" required placeholder="'+(currentUser?'Escreva uma resposta…':'Entre na sua conta para responder')+'" '+(currentUser?'':'disabled')+'><button class="btn btn-ghost" type="submit" '+(currentUser?'':'disabled')+'>Responder</button></form></div></article>';
+  }).join('');
+ }
+ $('#communityUserHint').textContent=currentUser?'Publicando como '+currentUser.nome+'.':'Entre na sua conta para publicar.';
+ const form=$('#postForm');
+ if(!currentUser){form.querySelector('button[type="submit"]').disabled=true;form.querySelectorAll('input,select,textarea').forEach(el=>el.disabled=true);$('#communityUserHint').innerHTML='Você precisa <a href="acesso.html">entrar na sua conta</a> para publicar.';}
+ form.addEventListener('submit',e=>{e.preventDefault();if(!currentUser){toast('Entre na sua conta para publicar.');return;}const d=new FormData(form),categoria=String(d.get('categoria')||''),texto=String(d.get('texto')||'').trim();if(!labels[categoria]||!texto){toast('Escolha um assunto e escreva sua publicação.');return;}const all=posts();all.push({id:'c'+Date.now()+Math.random().toString(36).slice(2,7),autorId:currentUser.id,autor:currentUser.nome,cidade:currentUser.cidade||'',uf:currentUser.uf||'',categoria,texto,criadoEm:new Date().toISOString(),curtidas:[],comentarios:[]});if(write(all)){form.reset();render();toast('Publicação adicionada neste navegador!');}});
+ $$('.community-filter').forEach(b=>b.addEventListener('click',()=>{filtro=b.dataset.filter;$$('.community-filter').forEach(x=>x.classList.toggle('active',x===b));render();}));
+ $('#communityFeed').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;if(!currentUser){toast('Entre na sua conta para interagir.');return;}const all=posts(),p=all.find(x=>x.id===b.dataset.id);if(!p)return;
+  if(b.dataset.action==='like'){p.curtidas=Array.isArray(p.curtidas)?p.curtidas:[];p.curtidas=p.curtidas.includes(currentUser.id)?p.curtidas.filter(x=>x!==currentUser.id):p.curtidas.concat(currentUser.id);write(all);render();}
+  if(b.dataset.action==='delete'&&p.autorId===currentUser.id&&confirm('Excluir esta publicação?')){write(all.filter(x=>x.id!==p.id));render();toast('Publicação excluída.');}
+  if(b.dataset.action==='delete-comment'){const c=(p.comentarios||[]).find(x=>x.id===b.dataset.commentId);if(c&&c.autorId===currentUser.id){p.comentarios=p.comentarios.filter(x=>x.id!==c.id);write(all);render();}}
+ });
+ $('#communityFeed').addEventListener('submit',e=>{const f=e.target.closest('[data-comment-form]');if(!f)return;e.preventDefault();if(!currentUser){toast('Entre na sua conta para responder.');return;}const input=f.querySelector('[name="comentario"]'),texto=input.value.trim();if(!texto)return;const all=posts(),p=all.find(x=>x.id===f.dataset.commentForm);if(!p)return;p.comentarios=Array.isArray(p.comentarios)?p.comentarios:[];p.comentarios.push({id:'r'+Date.now(),autorId:currentUser.id,autor:currentUser.nome,texto,criadoEm:new Date().toISOString()});if(write(all)){render();toast('Resposta adicionada.');}});
+ render();
+})();
