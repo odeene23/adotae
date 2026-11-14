@@ -64,8 +64,7 @@ const PETS_EXEMPLO = [
   { id: 'ex4', tipo: 'doacao', nome: 'Manequinho', especie: 'gato', raca: 'Siamês', idadeMeses: 36, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'sim', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Calma e independente. Prefere casas sem outros gatos. Castrada e vermifugada.', uf: 'SP', cidade: 'São Paulo', contato: { nome: 'Paulo Ramos', telefone: '(11) 99999-0004', email: 'paulo@exemplo.com' }, foto: 'img/pets/manequinho.jpg' },
   { id: 'ex5', tipo: 'doacao', nome: 'Pipoca', especie: 'outro', raca: 'Coelho mini', idadeMeses: 12, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'nao', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Coelhinha dócil, acostumada com colo. Vai junto com a gaiola e o kit de cuidados.', uf: 'MG', cidade: 'Belo Horizonte', contato: { nome: 'Lúcia Ferraz', telefone: '(31) 99999-0005', email: 'lucia@exemplo.com' }, foto: 'img/pets/pipoca.jpg' },
   { id: 'ex6', tipo: 'doacao', nome: 'Fred', especie: 'cachorro', raca: 'Beagle', idadeMeses: 108, sexo: 'Macho', porte: 'Médio', vacina: 'sim', deficiencia: 'sim', deficienciaDetalhe: 'Surdez parcial', descricao: 'Idoso e cheio de amor. Quer um lar calmo para passar a melhor fase da vida.', uf: 'PR', cidade: 'Curitiba', contato: { nome: 'Rita Gomes', telefone: '(41) 99999-0006', email: 'rita@exemplo.com' }, foto: 'img/pets/fred.jpg' },
-  { id: 'ex7', tipo: 'doacao', nome: 'Luna', especie: 'cachorro', raca: 'SRD', idadeMeses: 3, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'nao', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Filhotinha resgatada, saudável e muito esperta. Procura família que ajude com as vacinas.', uf: 'BA', cidade: 'Salvador', contato: { nome: 'Davi Costa', telefone: '(71) 99999-0007', email: 'davi@exemplo.com' }, foto: 'img/pets/luna.jpg' },
-  { id: 'ex8', tipo: 'procura', nome: 'Procuro um cachorro de porte médio', especie: 'cachorro', raca: 'SRD', idadeMeses: 12, sexo: 'Tanto faz', porte: 'Médio', vacina: 'sim', deficiencia: 'sim', deficienciaDetalhe: 'Aceito animal com necessidades especiais', descricao: 'Moro em casa com quintal e trabalho meio período. Quero um companheiro para a família.', uf: 'PE', cidade: 'Recife', contato: { nome: 'Júlia Mendes', telefone: '(81) 99999-0008', email: 'julia@exemplo.com' }, foto: '' }
+  { id: 'ex7', tipo: 'doacao', nome: 'Luna', especie: 'cachorro', raca: 'SRD', idadeMeses: 3, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'nao', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Filhotinha resgatada, saudável e muito esperta. Procura família que ajude com as vacinas.', uf: 'BA', cidade: 'Salvador', contato: { nome: 'Davi Costa', telefone: '(71) 99999-0007', email: 'davi@exemplo.com' }, foto: 'img/pets/luna.jpg' }
 ];
 
 // Protege a listagem contra dados ausentes ou corrompidos no LocalStorage.
@@ -284,7 +283,6 @@ $$('[data-nav-especie]').forEach(link => link.addEventListener('click', () => {
   $$('.chip', $('#chipsEspecie')).forEach(chip => chip.classList.toggle('on', chip.dataset.especie === filtros.especie));
   renderizar();
 }));
-$$('input[name="tipo"]', $('#filtros')).forEach(r => r.addEventListener('change', () => { filtros.tipo = r.value; renderizar(); }));
 $('#filtroIdade').addEventListener('change', e => { filtros.idade = e.target.value; renderizar(); });
 $('#filtroVacina').addEventListener('change', e => { filtros.vacinado = e.target.checked; renderizar(); });
 $('#filtroFav').addEventListener('change', e => { filtros.soFav = e.target.checked; renderizar(); });
@@ -297,7 +295,6 @@ $('#limparFiltros').addEventListener('click', () => {
   $('#filtroIdade').value = '';
   $('#filtroVacina').checked = false;
   $('#filtroFav').checked = false;
-  $('input[name="tipo"][value=""]', $('#filtros')).checked = true;
   $('.chip', $('#chipsEspecie')).forEach((c, i) => c.classList.toggle('on', i === 0));
   renderizar();
 });
