@@ -383,3 +383,78 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
 .logout-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .65rem; margin-top: 1.2rem; }
 .remember-toggle { margin: .15rem 0 .25rem; }
 @media(max-width:600px) { .logout-actions { flex-direction: column-reverse; } .logout-actions .btn { width: 100%; } .auth-home-menu { margin-left: auto; } }
+
+
+/* ---------- Comunidade Adotaê (armazenamento local) ---------- */
+.community-main,.help-main { width:min(1180px,94%); max-width:1180px; }
+.community-hero,.help-hero { padding:2rem; border-radius:22px; background:linear-gradient(135deg,var(--blue-soft),var(--surface)); border:1px solid var(--line); margin-bottom:1.4rem; }
+.community-eyebrow { display:inline-block; color:var(--blue); font-size:.76rem; font-weight:900; letter-spacing:.09em; margin-bottom:.5rem; }
+.community-hero h1,.help-hero h1 { font:800 clamp(1.8rem,4vw,2.7rem)/1.1 var(--font-title); color:var(--ink); margin:.2rem 0 .7rem; max-width:25ch; }
+.community-hero p,.help-hero p { color:var(--muted); max-width:68ch; margin:0; }
+.community-layout { display:grid; grid-template-columns:230px minmax(0,1fr); gap:1.25rem; align-items:start; }
+.community-sidebar,.community-compose,.community-post,.help-search-card,.help-service-card,.help-emergency-note { background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); }
+.community-sidebar { padding:1rem; display:grid; gap:.35rem; }
+.community-sidebar h2,.community-compose h2,.community-feed-heading h2 { font:800 1.2rem var(--font-title); margin:0 0 .4rem; color:var(--ink); }
+.community-filter { border:0; background:transparent; color:var(--muted); text-align:left; padding:.65rem .75rem; border-radius:10px; font:700 .92rem var(--font-body); cursor:pointer; }
+.community-filter:hover,.community-filter.active { background:var(--blue-soft); color:var(--blue-dark); }
+.community-side-note { border-top:1px solid var(--line); margin-top:.7rem; padding-top:1rem; }
+.community-side-note p,.community-muted { color:var(--muted); font-size:.86rem; }
+.community-content { min-width:0; display:grid; gap:1rem; }
+.community-compose { padding:1.2rem; }
+.community-compose form { display:grid; gap:.8rem; }
+.community-compose-bottom,.community-feed-heading,.community-post-top,.community-post-actions,.help-search-actions { display:flex; align-items:center; justify-content:space-between; gap:.8rem; flex-wrap:wrap; }
+.community-feed-heading { margin:.25rem 0; }
+.community-feed { display:grid; gap:.9rem; }
+.community-post { padding:1.15rem; }
+.community-post-top { justify-content:flex-start; }
+.community-avatar { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; flex:0 0 auto; background:var(--blue-soft); color:var(--blue-dark); font-weight:900; font-size:1.1rem; }
+.community-author { display:grid; gap:.1rem; min-width:0; flex:1; }
+.community-author span { color:var(--muted); font-size:.78rem; }
+.community-category { padding:.3rem .65rem; border-radius:999px; background:var(--blue-soft); color:var(--blue-dark); font-size:.75rem; font-weight:800; }
+.community-post-text { white-space:normal; overflow-wrap:anywhere; line-height:1.6; margin:1rem 0; }
+.community-post-actions { justify-content:flex-start; border-bottom:1px solid var(--line); padding-bottom:.7rem; color:var(--muted); font-size:.82rem; }
+.community-post-actions button { border:0; background:transparent; color:var(--muted); cursor:pointer; font:700 .84rem var(--font-body); padding:.25rem; }
+.community-post-actions button.liked { color:var(--heart); }
+.community-post-actions .community-delete { margin-left:auto; }
+.community-comments { display:grid; gap:.55rem; padding-top:.7rem; }
+.community-comment { display:flex; align-items:flex-start; gap:.5rem; padding:.55rem .7rem; background:var(--bg); border-radius:10px; font-size:.86rem; }
+.community-comment strong { white-space:nowrap; }
+.community-comment span { overflow-wrap:anywhere; flex:1; }
+.community-comment button { border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:1.1rem; }
+.community-comment-form { display:flex; gap:.5rem; }
+.community-comment-form input { min-width:0; flex:1; padding:.7rem .8rem; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); font:inherit; }
+.community-empty { text-align:center; padding:2.2rem 1rem; border:1px dashed var(--line); border-radius:16px; color:var(--muted); background:var(--surface); }
+.community-empty span { display:block; font-size:2rem; margin-bottom:.5rem; }
+.community-empty strong { color:var(--ink); }
+.community-local-note { margin:1rem 0; color:var(--muted); font-size:.8rem; text-align:center; }
+.help-search-card { padding:1.3rem; margin-bottom:1.2rem; }
+.help-search-card form { display:grid; gap:.7rem; }
+.help-search-actions { justify-content:flex-start; }
+.help-results { scroll-margin-top:1rem; }
+.help-service-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+.help-service-card { padding:1.2rem; display:flex; flex-direction:column; align-items:flex-start; }
+.help-service-icon { font-size:2rem; margin-bottom:.3rem; }
+.help-service-card h3 { margin:.2rem 0 .35rem; font:800 1.15rem var(--font-title); color:var(--ink); }
+.help-service-card p { color:var(--muted); font-size:.9rem; line-height:1.5; flex:1; }
+.help-service-card .btn { margin-top:.6rem; }
+.help-map-note,.help-emergency-note { padding:1rem 1.1rem; margin:1rem 0; border-radius:14px; font-size:.88rem; }
+.help-map-note { background:var(--blue-soft); color:var(--blue-dark); }
+.help-emergency-note { border-color:#f0d3a0; background:#fff8e9; color:#6b4a17; }
+.help-emergency-note p { margin:.3rem 0 0; }
+.help-main [hidden] { display:none !important; }
+.adoption-countdown { font-size:1.05rem; font-weight:900; }
+#detCancelarRedirecionamento { margin-top:.3rem; }
+@media(max-width:760px) {
+ .community-layout { grid-template-columns:1fr; }
+ .community-sidebar { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .community-sidebar h2,.community-side-note { grid-column:1/-1; }
+ .community-filter { font-size:.82rem; }
+}
+@media(max-width:560px) {
+ .community-hero,.help-hero { padding:1.25rem; }
+ .help-service-grid { grid-template-columns:1fr; }
+ .community-compose,.community-post,.help-search-card,.help-service-card { padding:1rem; }
+ .community-compose-bottom { align-items:flex-start; }
+ .community-comment-form { flex-direction:column; }
+ .help-search-actions { flex-direction:column; align-items:stretch; }
+}
