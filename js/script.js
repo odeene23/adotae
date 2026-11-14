@@ -64,8 +64,7 @@ const PETS_EXEMPLO = [
   { id: 'ex4', tipo: 'doacao', nome: 'Manequinho', especie: 'gato', raca: 'Siamês', idadeMeses: 36, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'sim', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Calma e independente. Prefere casas sem outros gatos. Castrada e vermifugada.', uf: 'SP', cidade: 'São Paulo', contato: { nome: 'Paulo Ramos', telefone: '(11) 99999-0004', email: 'paulo@exemplo.com' }, foto: 'img/pets/manequinho.jpg' },
   { id: 'ex5', tipo: 'doacao', nome: 'Pipoca', especie: 'outro', raca: 'Coelho mini', idadeMeses: 12, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'nao', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Coelhinha dócil, acostumada com colo. Vai junto com a gaiola e o kit de cuidados.', uf: 'MG', cidade: 'Belo Horizonte', contato: { nome: 'Lúcia Ferraz', telefone: '(31) 99999-0005', email: 'lucia@exemplo.com' }, foto: 'img/pets/pipoca.jpg' },
   { id: 'ex6', tipo: 'doacao', nome: 'Fred', especie: 'cachorro', raca: 'Beagle', idadeMeses: 108, sexo: 'Macho', porte: 'Médio', vacina: 'sim', deficiencia: 'sim', deficienciaDetalhe: 'Surdez parcial', descricao: 'Idoso e cheio de amor. Quer um lar calmo para passar a melhor fase da vida.', uf: 'PR', cidade: 'Curitiba', contato: { nome: 'Rita Gomes', telefone: '(41) 99999-0006', email: 'rita@exemplo.com' }, foto: 'img/pets/fred.jpg' },
-  { id: 'ex7', tipo: 'doacao', nome: 'Luna', especie: 'cachorro', raca: 'SRD', idadeMeses: 3, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'nao', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Filhotinha resgatada, saudável e muito esperta. Procura família que ajude com as vacinas.', uf: 'BA', cidade: 'Salvador', contato: { nome: 'Davi Costa', telefone: '(71) 99999-0007', email: 'davi@exemplo.com' }, foto: 'img/pets/luna.jpg' },
-  { id: 'ex8', tipo: 'procura', nome: 'Procuro um cachorro de porte médio', especie: 'cachorro', raca: 'SRD', idadeMeses: 12, sexo: 'Tanto faz', porte: 'Médio', vacina: 'sim', deficiencia: 'sim', deficienciaDetalhe: 'Aceito animal com necessidades especiais', descricao: 'Moro em casa com quintal e trabalho meio período. Quero um companheiro para a família.', uf: 'PE', cidade: 'Recife', contato: { nome: 'Júlia Mendes', telefone: '(81) 99999-0008', email: 'julia@exemplo.com' }, foto: '' }
+  { id: 'ex7', tipo: 'doacao', nome: 'Luna', especie: 'cachorro', raca: 'SRD', idadeMeses: 3, sexo: 'Fêmea', porte: 'Pequeno', vacina: 'nao', deficiencia: 'nao', deficienciaDetalhe: '', descricao: 'Filhotinha resgatada, saudável e muito esperta. Procura família que ajude com as vacinas.', uf: 'BA', cidade: 'Salvador', contato: { nome: 'Davi Costa', telefone: '(71) 99999-0007', email: 'davi@exemplo.com' }, foto: 'img/pets/luna.jpg' }
 ];
 
 // Protege a listagem contra dados ausentes ou corrompidos no LocalStorage.
@@ -214,6 +213,7 @@ function cardHTML(p) {
 function filtrar() {
   const q = filtros.q.trim().toLowerCase();
   return getPets().filter(p => {
+    if (p.tipo !== 'doacao') return false;
     if (filtros.especie && p.especie !== filtros.especie) return false;
     if (filtros.tipo && p.tipo !== filtros.tipo) return false;
     if (filtros.uf && p.uf !== filtros.uf) return false;
@@ -283,7 +283,6 @@ $$('[data-nav-especie]').forEach(link => link.addEventListener('click', () => {
   $$('.chip', $('#chipsEspecie')).forEach(chip => chip.classList.toggle('on', chip.dataset.especie === filtros.especie));
   renderizar();
 }));
-$$('input[name="tipo"]', $('#filtros')).forEach(r => r.addEventListener('change', () => { filtros.tipo = r.value; renderizar(); }));
 $('#filtroIdade').addEventListener('change', e => { filtros.idade = e.target.value; renderizar(); });
 $('#filtroVacina').addEventListener('change', e => { filtros.vacinado = e.target.checked; renderizar(); });
 $('#filtroFav').addEventListener('change', e => { filtros.soFav = e.target.checked; renderizar(); });
@@ -296,7 +295,6 @@ $('#limparFiltros').addEventListener('click', () => {
   $('#filtroIdade').value = '';
   $('#filtroVacina').checked = false;
   $('#filtroFav').checked = false;
-  $('input[name="tipo"][value=""]', $('#filtros')).checked = true;
   $('.chip', $('#chipsEspecie')).forEach((c, i) => c.classList.toggle('on', i === 0));
   renderizar();
 });
@@ -329,6 +327,22 @@ if (window.matchMedia('(max-width: 960px)').matches) $('#filtros').open = false;
 const dlgDetalhe = $('#detalhe');
 let petAberto = null;
 
+let adocaoCountdown = null;
+function contatoPreferido(p, mensagem) {
+  const c = p.contato || {}, canal = c.preferencia || (c.telefone ? 'whatsapp' : 'email');
+  const tel = soDigitos(c.telefone || '');
+  if (canal === 'whatsapp' && (tel.length === 10 || tel.length === 11)) return { url: 'https://wa.me/55' + tel + '?text=' + mensagem, label: 'Conversar pelo WhatsApp' };
+  if (canal === 'telefone' && (tel.length === 10 || tel.length === 11)) return { url: 'tel:+55' + tel, label: 'Ligar para o responsável' };
+  if (canal === 'instagram' && c.instagram) {
+    const usuario = String(c.instagram).replace(/^@/, '').replace(/[^A-Za-z0-9._]/g, '');
+    if (usuario.length >= 2) return { url: 'https://www.instagram.com/' + usuario + '/', label: 'Abrir Instagram' };
+  }
+  if (canal === 'email' && c.email && /^\S+@\S+\.\S+$/.test(c.email)) return { url: 'mailto:' + encodeURIComponent(c.email) + '?subject=' + encodeURIComponent('Adotaê: ' + p.nome), label: 'Enviar e-mail' };
+  if (tel.length === 10 || tel.length === 11) return { url: 'https://wa.me/55' + tel + '?text=' + mensagem, label: 'Conversar pelo WhatsApp' };
+  if (c.email && /^\S+@\S+\.\S+$/.test(c.email)) return { url: 'mailto:' + encodeURIComponent(c.email), label: 'Enviar e-mail' };
+  return { url: '', label: '' };
+}
+
 function abrirDetalhe(id) {
   const p = getPets().find(x => x.id === id);
   if (!p) return;
@@ -342,6 +356,7 @@ function abrirDetalhe(id) {
   const msg = encodeURIComponent(proc
     ? `Olá, ${p.contato.nome}! Vi seu pedido "${p.nome}" no Adotaê e posso ajudar.`
     : `Olá, ${p.contato.nome}! Tenho interesse em adotar o(a) ${p.nome}, que vi no Adotaê.`);
+  const destinoContato = contatoPreferido(p, msg);
   const dono = store.get('usuario', null);
   const meu = dono && p.donoId === dono.id;
 
@@ -361,18 +376,14 @@ function abrirDetalhe(id) {
           <div class="full"><dt>${proc ? 'Aceita deficiência?' : 'Deficiência'}</dt><dd>${esc(defTxt)}</dd></div>
         </dl>
         <p class="det-desc">${esc(p.descricao)}</p>
-        ${!proc && !meu ? `<section class="adoption-action" aria-label="Demonstrar interesse na adoção"><button class="btn btn-primary btn-adopt" type="button" id="detQueroPet">💛 Eu quero esse pet</button><div class="adoption-celebration" id="detAdocaoSucesso" hidden role="status" aria-live="polite"><span class="celebration-paws" aria-hidden="true">🐾 ✨ 🐾</span><strong>Ótima escolha!</strong><span>Seu companheiro(a) está te esperando 💛</span></div></section>` : ''}
+        ${!proc && !meu ? `<section class="adoption-action" aria-label="Demonstrar interesse na adoção"><button class="btn btn-primary btn-adopt" type="button" id="detQueroPet">💛 Eu quero esse pet</button><div class="adoption-celebration" id="detAdocaoSucesso" hidden role="status" aria-live="polite"><span class="celebration-paws" aria-hidden="true">🐾 ✨ 🐾</span><strong>Ótima escolha!</strong><span>Estamos te redirecionando ao seu próximo companheiro(a) ❤️</span><span class="adoption-countdown"><b id="detAdocaoContagem">7</b> segundos</span><button class="btn btn-ghost" type="button" id="detCancelarRedirecionamento">Cancelar redirecionamento</button></div></section>` : ''}
         <div class="det-actions">
           <button class="btn btn-ghost" type="button" id="detFav" data-fav-det="${p.id}"></button>
           <button class="btn btn-ghost" type="button" id="detShare"><svg class="ic"><use href="#i-share"/></svg>Compartilhar</button>
         </div>
         <div class="det-contact">
-          <h3>Contato de ${esc(p.contato.nome)}</h3>
-          <div class="det-actions">
-            <a class="btn btn-primary" href="https://wa.me/55${tel}?text=${msg}" target="_blank" rel="noopener"><svg class="ic"><use href="#i-chat"/></svg>WhatsApp</a>
-            <a class="btn btn-ghost" href="tel:+55${tel}"><svg class="ic"><use href="#i-phone"/></svg>${esc(p.contato.telefone)}</a>
-            <a class="btn btn-ghost" href="mailto:${esc(p.contato.email)}?subject=${encodeURIComponent('Adotaê: ' + p.nome)}"><svg class="ic"><use href="#i-mail"/></svg>${esc(p.contato.email)}</a>
-          </div>
+          <h3>Contato preferido de ${esc(p.contato.nome)}</h3>
+          ${destinoContato.url ? `<div class="det-actions"><a class="btn btn-primary" href="${esc(destinoContato.url)}" target="_blank" rel="noopener">${esc(destinoContato.label)}</a></div>` : '<p>O responsável ainda não informou um contato válido.</p>'}
         </div>
         ${meu ? `<button class="det-remove" type="button" id="detRemover">Remover meu anúncio</button>` : ''}
       </div>
@@ -392,14 +403,24 @@ function atualizarBotaoFavDetalhe(id) {
 
 dlgDetalhe.addEventListener('click', async e => {
   if (e.target.closest('#detQueroPet')) {
-    const botao = $('#detQueroPet');
-    const celebracao = $('#detAdocaoSucesso');
+    const botao = $('#detQueroPet'), celebracao = $('#detAdocaoSucesso');
+    const destino = petAberto && contatoPreferido(petAberto, encodeURIComponent('Olá! Tenho interesse em adotar o(a) ' + petAberto.nome + ', que vi no Adotaê.'));
+    if (!destino || !destino.url) { toast('Este anúncio ainda não tem um contato válido.'); return; }
     if (botao && celebracao) {
-      botao.hidden = true;
-      celebracao.hidden = false;
-      celebracao.classList.remove('celebrate');
-      void celebracao.offsetWidth;
-      celebracao.classList.add('celebrate');
+      botao.hidden = true; celebracao.hidden = false;
+      celebracao.classList.remove('celebrate'); void celebracao.offsetWidth; celebracao.classList.add('celebrate');
+      let restante = 7; const contador = $('#detAdocaoContagem');
+      if (contador) contador.textContent = restante;
+      clearInterval(adocaoCountdown);
+      adocaoCountdown = setInterval(() => {
+        restante -= 1;
+        if (contador) contador.textContent = restante;
+        if (restante <= 0) { clearInterval(adocaoCountdown); adocaoCountdown = null; window.location.assign(destino.url); }
+      }, 1000);
+      $('#detCancelarRedirecionamento')?.addEventListener('click', () => {
+        clearInterval(adocaoCountdown); adocaoCountdown = null;
+        celebracao.hidden = true; botao.hidden = false;
+      }, { once: true });
     }
     return;
   }
@@ -413,7 +434,7 @@ dlgDetalhe.addEventListener('click', async e => {
     toast('Anúncio removido');
   }
 });
-dlgDetalhe.addEventListener('close', () => history.replaceState(null, '', location.pathname + location.search));
+dlgDetalhe.addEventListener('close', () => { clearInterval(adocaoCountdown); adocaoCountdown = null; history.replaceState(null, '', location.pathname + location.search); });
 
 async function compartilhar(p) {
   const url = location.href.split('#')[0] + '#pet-' + p.id;

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adotaê — Ajuda perto de você</title><meta name="description" content="Encontre clínicas veterinárias, castração, hospitais e ONGs perto de você.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="cadastro.css"></head>
+<body class="auth-page help-page">
+<header class="auth-header"><a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a>
+<nav class="announce-nav" aria-label="Navegação principal"><a href="index.html">Início</a><a href="anunciar.html">Quero doar</a><a href="comunidade.html">Comunidade</a><a href="ajuda.html" aria-current="page">Ajuda perto de você</a><a href="acesso.html">Minha conta</a></nav></header>
+<main class="auth-main help-main"><section class="help-hero"><span class="community-eyebrow">CUIDADO ANIMAL NA SUA REGIÃO</span><h1>Encontre ajuda para seu companheiro. 📍</h1><p>Busque clínicas veterinárias, hospitais, serviços de castração e organizações de proteção animal perto de você.</p></section>
+<section class="help-search-card"><form id="locationForm"><label class="field"><span>Qual é sua localização?</span><input id="locationInput" name="localizacao" type="text" maxlength="120" required placeholder="Digite seu bairro, cidade ou CEP"></label>
+<div class="help-search-actions"><button class="btn btn-primary" type="submit">Buscar serviços</button><button class="btn btn-ghost" id="useLocation" type="button">◎ Usar minha localização</button></div><p id="locationStatus" class="community-muted" aria-live="polite">Você também pode informar apenas o bairro ou a cidade.</p></form></section>
+<section class="help-results" id="helpResults" hidden><div class="community-feed-heading"><div><h2>Serviços na região</h2><p id="searchedLocation" class="community-muted"></p></div></div>
+<div class="help-service-grid">
+<article class="help-service-card"><div class="help-service-icon">✂️</div><h3>Castração gratuita</h3><p>Encontre campanhas, programas públicos e serviços gratuitos. Confirme critérios, documentação e agendamento diretamente com o local.</p><a class="btn btn-primary btn-block" data-map="castracao" target="_blank" rel="noopener">Buscar no mapa</a></article>
+<article class="help-service-card"><div class="help-service-icon">🩺</div><h3>Veterinários e clínicas</h3><p>Consulte clínicas veterinárias próximas e entre em contato para confirmar especialidades, valores e horários.</p><a class="btn btn-primary btn-block" data-map="veterinarios" target="_blank" rel="noopener">Buscar no mapa</a></article>
+<article class="help-service-card"><div class="help-service-icon">🚑</div><h3>Hospitais e emergências</h3><p>Encontre hospitais veterinários e atendimento de urgência. Ligue antes para confirmar disponibilidade.</p><a class="btn btn-primary btn-block" data-map="emergencia" target="_blank" rel="noopener">Buscar no mapa</a></article>
+<article class="help-service-card"><div class="help-service-icon">🐾</div><h3>ONGs e proteção animal</h3><p>Localize organizações, abrigos e grupos de proteção que podem orientar ou apoiar resgates.</p><a class="btn btn-primary btn-block" data-map="ongs" target="_blank" rel="noopener">Buscar no mapa</a></article>
+</div><div class="help-map-note">Os resultados são abertos no Google Maps. Confira endereço, funcionamento, disponibilidade e se o serviço é realmente gratuito antes de se deslocar.</div></section>
+<section class="help-emergency-note"><strong>⚠️ Em caso de emergência</strong><p>Não espere por respostas na comunidade. Procure atendimento veterinário imediatamente e telefone para confirmar que a unidade pode receber o animal.</p></section>
+</main><div class="toast" id="toast" role="status" aria-live="polite"></div><script src="ajuda.js"></script></body></html>

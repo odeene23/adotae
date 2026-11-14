@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Adotaê — Anunciar animal</title><meta name="description" content="Publique um animal para adoção ou conte qual animal você procura.">
+<title>Adotaê — Quero doar</title><meta name="description" content="Publique um animal para doação no Adotaê.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="cadastro.css"></head>
 <body class="auth-page announce-page">
-<header class="auth-header"><a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a><nav class="announce-nav"><details class="nav-group auth-home-menu"><summary>Início ▾</summary><div class="nav-submenu"><a href="index.html#topo">Página inicial</a><a href="index.html#animais">Todos os animais</a><a href="index.html#animais" data-nav-especie="cachorro">Cachorros</a><a href="index.html#animais" data-nav-especie="gato">Gatos</a><a href="index.html#animais" data-nav-especie="outro">Outros animais</a><a href="index.html#porque">Adoção responsável</a><a href="index.html#sobre">Como funciona</a><a href="index.html#contato">Fale com a gente</a><a href="acesso.html">Minha conta e favoritos</a><a href="anunciar.html">Publicar um anúncio</a></div></details><a href="acesso.html">Minha conta</a><button class="btn btn-ghost" id="btnSairAnuncio" type="button">Sair</button></nav></header>
-<main class="auth-main announce-main"><h1>Ajude um animal a encontrar um lar</h1><p class="announce-intro">Publique um animal para adoção ou conte à comunidade qual amigo você procura.</p>
+<header class="auth-header"><a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a><nav class="announce-nav"><details class="nav-group auth-home-menu"><summary>Início ▾</summary><div class="nav-submenu"><a href="index.html#topo">Página inicial</a><a href="index.html#animais">Todos os animais</a><a href="index.html#animais" data-nav-especie="cachorro">Cachorros</a><a href="index.html#animais" data-nav-especie="gato">Gatos</a><a href="index.html#animais" data-nav-especie="outro">Outros animais</a><a href="index.html#porque">Adoção responsável</a><a href="index.html#sobre">Como funciona</a><a href="index.html#contato">Fale com a gente</a><a href="acesso.html">Minha conta e favoritos</a><a href="anunciar.html">Quero doar</a><a href="comunidade.html">Comunidade</a><a href="ajuda.html">Ajuda perto de você</a></div></details><a href="acesso.html">Minha conta</a><button class="btn btn-ghost" id="btnSairAnuncio" type="button">Sair</button></nav></header>
+<main class="auth-main announce-main"><h1>Ajude um animal a encontrar um lar</h1><p class="announce-intro">Compartilhe os dados do animal que você deseja encaminhar para uma adoção responsável.</p>
   <section class="announce-card" aria-labelledby="anuncioTitulo">
-    <h2 id="anuncioTitulo">Novo anúncio</h2>
+    <h2 id="anuncioTitulo">Cadastrar animal para doação</h2>
     <form id="anuncioForm" class="form" novalidate>
-      <fieldset class="mode">
-        <legend class="sr-only">O que você quer fazer?</legend>
-        <label class="mode-opt"><input type="radio" name="tipo" value="doacao" checked><span>Quero doar um animal</span></label>
-        <label class="mode-opt"><input type="radio" name="tipo" value="procura"><span>Quero adotar um animal</span></label>
-      </fieldset>
+      <input type="hidden" name="tipo" value="doacao">
       <p class="hint" id="anuncioDica"></p>
 
       <label class="field"><span data-doacao="Nome do animal" data-procura="Título do pedido (ex.: Procuro um gatinho)">Nome do animal</span>
@@ -86,15 +82,25 @@
         <input type="file" name="foto" accept="image/*"></label>
 
       <fieldset class="contact-box">
-        <legend>Contato para os interessados</legend>
+        <legend>Como você prefere receber os interessados?</legend>
+        <label class="field"><span>Escolha seu canal de contato preferido</span>
+          <select name="preferenciaContato" id="preferenciaContato" required>
+            <option value="">Selecione uma opção</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="telefone">Ligação telefônica</option>
+            <option value="instagram">Instagram</option>
+            <option value="email">E-mail</option>
+          </select>
+        </label>
         <div class="row">
-          <label class="field"><span>Telefone / WhatsApp</span><input type="tel" name="telefone" id="anTel" required inputmode="tel"></label>
-          <label class="field"><span>E-mail</span><input type="email" name="email" id="anEmail" required></label>
+          <label class="field" id="contatoTelefoneBox"><span>Telefone / WhatsApp com DDD</span><input type="tel" name="telefone" id="anTel" inputmode="tel"></label>
+          <label class="field" id="contatoEmailBox"><span>E-mail</span><input type="email" name="email" id="anEmail"></label>
+          <label class="field" id="contatoInstagramBox" hidden><span>Usuário do Instagram</span><input type="text" name="instagram" id="anInstagram" maxlength="60" placeholder="@seuusuario"></label>
         </div>
       </fieldset>
 
       <p class="form-erro" id="anErro" role="alert" hidden></p>
-      <button class="btn btn-primary btn-block btn-lg" type="submit">Publicar anúncio</button>
+      <button class="btn btn-primary btn-block btn-lg" type="submit">Publicar animal para doação</button>
     </form>
   </section>
 

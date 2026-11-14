@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adotaê — Comunidade</title><meta name="description" content="Converse, tire dúvidas e ajude outros tutores na comunidade Adotaê.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="cadastro.css"></head>
+<body class="auth-page community-page">
+<header class="auth-header"><a class="brand" href="index.html"><img src="img/logo.jpeg" alt="Adotaê"><span>Adotaê</span></a>
+<nav class="announce-nav" aria-label="Navegação principal"><a href="index.html">Início</a><a href="anunciar.html">Quero doar</a><a href="comunidade.html" aria-current="page">Comunidade</a><a href="ajuda.html">Ajuda perto de você</a><a href="acesso.html">Minha conta</a></nav></header>
+<main class="auth-main community-main">
+<section class="community-hero"><span class="community-eyebrow">ADOTAÊ • JUNTOS PELOS ANIMAIS</span><h1>Uma comunidade que cuida de quem não pode pedir ajuda. 🐾</h1><p>Compartilhe dúvidas, encontre apoio, converse sobre adoção, castração, veterinários, resgates e cuidados.</p></section>
+<section class="community-layout"><aside class="community-sidebar"><h2>Assuntos</h2>
+<button type="button" class="community-filter active" data-filter="todos">Todas as publicações</button><button type="button" class="community-filter" data-filter="adocao">🐾 Adoção</button><button type="button" class="community-filter" data-filter="castracao">✂️ Castração</button><button type="button" class="community-filter" data-filter="veterinarios">🩺 Veterinários</button><button type="button" class="community-filter" data-filter="saude">❤️ Saúde animal</button><button type="button" class="community-filter" data-filter="resgate">🏡 Resgate</button><button type="button" class="community-filter" data-filter="dicas">💡 Dicas e cuidados</button><button type="button" class="community-filter" data-filter="geral">💬 Geral</button>
+<div class="community-side-note"><strong>Precisa encontrar um serviço?</strong><p>Busque clínicas, hospitais veterinários e locais de castração na sua região.</p><a class="btn btn-ghost btn-block" href="ajuda.html">Ajuda perto de você</a></div></aside>
+<div class="community-content"><section class="community-compose"><h2>Compartilhe com a comunidade</h2><p class="community-muted">Tem uma dúvida ou quer ajudar alguém? Comece uma conversa.</p>
+<form id="postForm"><label class="field"><span>Assunto</span><select name="categoria" required><option value="">Escolha uma categoria</option><option value="adocao">Adoção</option><option value="castracao">Castração</option><option value="veterinarios">Veterinários</option><option value="saude">Saúde animal</option><option value="resgate">Resgate</option><option value="dicas">Dicas e cuidados</option><option value="geral">Geral</option></select></label>
+<label class="field"><span>Sua publicação</span><textarea name="texto" rows="4" maxlength="1200" required placeholder="Ex.: Alguém conhece algum local de castração gratuita na minha região?"></textarea></label>
+<div class="community-compose-bottom"><span id="communityUserHint" class="community-muted">Entre na sua conta para publicar.</span><button class="btn btn-primary" type="submit">Publicar</button></div></form></section>
+<div class="community-feed-heading"><h2>Conversas da comunidade</h2><span id="postCount" class="community-muted">0 publicações</span></div>
+<div id="communityFeed" class="community-feed" aria-live="polite"><div class="community-empty"><span>🐾</span><strong>As conversas começam com você!</strong><p>Faça a primeira publicação e ajude a comunidade a crescer.</p></div></div></div></section>
+<p class="community-local-note">Nesta versão, publicações, curtidas e comentários ficam salvos somente neste navegador. Para usuários em outros dispositivos interagirem entre si, será necessário conectar um serviço compartilhado no futuro.</p>
+</main><div class="toast" id="toast" role="status" aria-live="polite"></div><script src="comunidade.js"></script></body></html>
