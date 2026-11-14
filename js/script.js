@@ -214,6 +214,7 @@ function cardHTML(p) {
 function filtrar() {
   const q = filtros.q.trim().toLowerCase();
   return getPets().filter(p => {
+    if (p.tipo !== 'doacao') return false;
     if (filtros.especie && p.especie !== filtros.especie) return false;
     if (filtros.tipo && p.tipo !== filtros.tipo) return false;
     if (filtros.uf && p.uf !== filtros.uf) return false;
