@@ -460,3 +460,7 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
  .community-comment-form { flex-direction:column; }
  .help-search-actions { flex-direction:column; align-items:stretch; }
 }
+
+.filter-info { padding:.8rem; border-radius:12px; background:var(--blue-soft); color:var(--blue-dark); }
+.filter-info p { margin:.35rem 0; font-size:.84rem; }
+.filter-info a { font-weight:900; color:var(--blue-dark); }
