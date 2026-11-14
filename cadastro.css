@@ -385,6 +385,8 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
 @media(max-width:600px) { .logout-actions { flex-direction: column-reverse; } .logout-actions .btn { width: 100%; } .auth-home-menu { margin-left: auto; } }
 
 
+#contatoTelefoneBox[hidden], #contatoEmailBox[hidden], #contatoInstagramBox[hidden] { display:none !important; }
+
 /* ---------- Comunidade Adotaê (armazenamento local) ---------- */
 .community-main,.help-main { width:min(1180px,94%); max-width:1180px; }
 .community-hero,.help-hero { padding:2rem; border-radius:22px; background:linear-gradient(135deg,var(--blue-soft),var(--surface)); border:1px solid var(--line); margin-bottom:1.4rem; }
@@ -411,7 +413,7 @@ input.invalido, select.invalido { border-color: #dc2626 !important; outline-colo
 .community-author { display:grid; gap:.1rem; min-width:0; flex:1; }
 .community-author span { color:var(--muted); font-size:.78rem; }
 .community-category { padding:.3rem .65rem; border-radius:999px; background:var(--blue-soft); color:var(--blue-dark); font-size:.75rem; font-weight:800; }
-.community-post-text { white-space:normal; overflow-wrap:anywhere; line-height:1.6; margin:1rem 0; }
+.community-post-text { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.6; margin:1rem 0; }
 .community-post-actions { justify-content:flex-start; border-bottom:1px solid var(--line); padding-bottom:.7rem; color:var(--muted); font-size:.82rem; }
 .community-post-actions button { border:0; background:transparent; color:var(--muted); cursor:pointer; font:700 .84rem var(--font-body); padding:.25rem; }
 .community-post-actions button.liked { color:var(--heart); }
