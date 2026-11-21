@@ -24,9 +24,9 @@
       <button class="tab" type="button" data-tab="cadastro" role="tab" aria-selected="false">Criar conta</button>
     </div>
 
-    <form id="loginForm" class="form" data-panel="login" novalidate>
-      <label class="field"><span>Usuário</span><input type="text" name="usuario" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
-      <label class="field"><span>Senha</span><input type="password" name="senha" data-senha required autocomplete="current-password"></label>
+    <form id="loginForm" class="form" data-panel="login" novalidate autocomplete="off">
+      <label class="field"><span>Usuário</span><input type="text" name="usuario" required autocomplete="off" autocapitalize="none" spellcheck="false"></label>
+      <label class="field"><span>Senha</span><input type="password" name="senha" data-senha required autocomplete="off"></label>
       <label class="show-password-toggle remember-toggle"><input type="checkbox" name="lembrar" id="lembrarDeMim"><span class="show-password-switch" aria-hidden="true"></span><span class="show-password-text">Lembrar de mim</span></label>
       <label class="show-password-toggle">
         <input type="checkbox" class="mostrar-senha">
