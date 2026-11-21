@@ -20,6 +20,13 @@
   var formRec = $('#recuperarForm');
   if (!auth || !formLogin || !formCad || !formRec) { return; }
 
+  // Se o usuário optou por não ser lembrado, os dados de sessão só sobrevivem nesta aba.
+  try {
+    if (localStorage.getItem('adotae_lembrar') !== 'true' && sessionStorage.getItem('adotae_sessao_ativa') !== 'true') {
+      ['adotae_sessao','adotae_usuario','adotae_usuario_logado','adotae_boas_vindas'].forEach(function(k){localStorage.removeItem(k);});
+    }
+  } catch(e){}
+
   /* ---------- utilitários ---------- */
   function norm(s) {
     return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -402,7 +409,7 @@
       formCad.reset();
       cadSenha.dispatchEvent(new Event('input'));
       $('#cepMsg').hidden = true;
-      formLogin.elements.usuario.value = usuario;
+      formLogin.elements.usuario.value = '';
       mostrarPainel('login');
       emitir('cadastro:sucesso', { usuario: usuario, nome: nome });
     });
@@ -462,7 +469,12 @@
     if (!user) { erroLogin('Usuário ou senha incorretos.'); return; }
     hashSenha(u, s).then(function (h) {
       if (h !== user.senha) { erroLogin('Usuário ou senha incorretos.'); return; }
-      try { localStorage.setItem(KEY_SESSAO, user.usuario); localStorage.setItem('adotae_lembrar', formLogin.elements.lembrar && formLogin.elements.lembrar.checked ? 'true' : 'false'); } catch (err) { /* ignora */ }
+      try {
+        var manter = !!(formLogin.elements.lembrar && formLogin.elements.lembrar.checked);
+        localStorage.setItem('adotae_lembrar', manter ? 'true' : 'false');
+        localStorage.setItem(KEY_SESSAO, user.usuario);
+        if (manter) sessionStorage.removeItem('adotae_sessao_ativa'); else sessionStorage.setItem('adotae_sessao_ativa','true');
+      } catch (err) { /* ignora */ }
       formLogin.reset();
       aplicarSessao();
       try { localStorage.setItem('adotae_usuario', JSON.stringify({ id:user.usuario, nome:user.nome, usuario:user.usuario, genero:user.genero||'', telefone:user.celular||'', celular:user.celular||'', email:'', uf:user.endereco&&user.endereco.uf||'', cidade:user.endereco&&user.endereco.cidade||'', endereco:user.endereco||{} })); } catch (err) { /* ignora */ }

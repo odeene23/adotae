@@ -6,6 +6,9 @@
            4 tema e fonte · 5 listagem · 6 detalhes · 7 conta · 8 anúncio · 9 contato
    ===================================================== */
 
+// Limpa os dados da sessão não persistente ao abrir uma nova sessão/aba.
+try { if(localStorage.getItem('adotae_lembrar')!=='true' && sessionStorage.getItem('adotae_sessao_ativa')!=='true') ['adotae_sessao','adotae_usuario','adotae_usuario_logado','adotae_boas_vindas'].forEach(k=>localStorage.removeItem(k)); } catch(e){}
+
 /* ---------- 1. UTILITÁRIOS ---------- */
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
@@ -277,6 +280,13 @@ $$('.nav-group').forEach(grupo => {
   });
 });
 
+
+// Fechar submenus ao clicar fora, em espaço vazio ou ao acionar outra área.
+document.addEventListener('click', e => {
+  $('.nav-group[open]').forEach(g => { if (!g.contains(e.target)) g.open = false; });
+});
+document.addEventListener('keydown', e => { if(e.key==='Escape') $('.nav-group[open]').forEach(g=>g.open=false); });
+
 // Atalhos de espécie disponíveis no submenu "Adotar".
 $$('[data-nav-especie]').forEach(link => link.addEventListener('click', () => {
   filtros.especie = link.dataset.navEspecie;
@@ -312,12 +322,13 @@ $('#buscaForm').addEventListener('submit', e => {
 
 /* favoritos no cabeçalho */
 $('#favTop').addEventListener('click', () => {
-  filtros.soFav = true;
-  $('#filtroFav').checked = true;
+  filtros.soFav = !filtros.soFav;
+  $('#filtroFav').checked = filtros.soFav;
   $('#filtros').open = true;
   renderizar();
   $('#animais').scrollIntoView();
-  if (!favs.size) toast('Você ainda não favoritou nenhum animal.');
+  if (filtros.soFav && !favs.size) toast('Você ainda não favoritou nenhum animal.');
+  else if (!filtros.soFav) toast('Filtro de favoritos desativado.');
 });
 
 /* filtros recolhidos no celular */
