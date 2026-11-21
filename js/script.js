@@ -282,10 +282,15 @@ $$('.nav-group').forEach(grupo => {
 
 
 // Fechar submenus ao clicar fora, em espaço vazio ou ao acionar outra área.
-document.addEventListener('click', e => {
-  $('.nav-group[open]').forEach(g => { if (!g.contains(e.target)) g.open = false; });
+function fecharMenusAbertos(alvo) {
+  $('.nav-group[open]').forEach(grupo => {
+    if (!grupo.contains(alvo)) grupo.open = false;
+  });
+}
+document.addEventListener('pointerdown', e => fecharMenusAbertos(e.target));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') $('.nav-group[open]').forEach(grupo => { grupo.open = false; });
 });
-document.addEventListener('keydown', e => { if(e.key==='Escape') $('.nav-group[open]').forEach(g=>g.open=false); });
 
 // Atalhos de espécie disponíveis no submenu "Adotar".
 $$('[data-nav-especie]').forEach(link => link.addEventListener('click', () => {

@@ -14,7 +14,8 @@
  const hdr=document.querySelector('.auth-header');if(hdr)hdr.append(tools);
  tools.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=[...tools.querySelectorAll('button')].indexOf(b);if(i===0)font=Math.max(.85,font-.1);if(i===1)font=1;if(i===2)font=Math.min(1.5,font+.1);if(b.hasAttribute('data-theme-toggle'))theme=theme==='dark'?'light':'dark';localStorage.setItem('adotae_a11y_font',JSON.stringify(font));localStorage.setItem('adotae_tema',JSON.stringify(theme));apply();});
  document.querySelectorAll('.nav-group').forEach(g=>{g.addEventListener('toggle',()=>{if(g.open)document.querySelectorAll('.nav-group').forEach(o=>{if(o!==g)o.open=false;});});});
- document.addEventListener('click',e=>{document.querySelectorAll('.nav-group[open]').forEach(g=>{if(!g.contains(e.target))g.open=false;});});
+ const fecharMenus=(alvo)=>document.querySelectorAll('.nav-group[open]').forEach(g=>{if(!g.contains(alvo))g.open=false;});
+ document.addEventListener('pointerdown',e=>fecharMenus(e.target));
  document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.nav-group[open]').forEach(g=>g.open=false);});
  apply();
 })();
