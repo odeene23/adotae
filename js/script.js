@@ -312,12 +312,13 @@ $('#buscaForm').addEventListener('submit', e => {
 
 /* favoritos no cabeçalho */
 $('#favTop').addEventListener('click', () => {
-  filtros.soFav = true;
-  $('#filtroFav').checked = true;
+  filtros.soFav = !filtros.soFav;
+  $('#filtroFav').checked = filtros.soFav;
   $('#filtros').open = true;
   renderizar();
   $('#animais').scrollIntoView();
-  if (!favs.size) toast('Você ainda não favoritou nenhum animal.');
+  if (filtros.soFav && !favs.size) toast('Você ainda não favoritou nenhum animal.');
+  else if (!filtros.soFav) toast('Filtro de favoritos desativado.');
 });
 
 /* filtros recolhidos no celular */
