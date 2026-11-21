@@ -6,6 +6,9 @@
            4 tema e fonte · 5 listagem · 6 detalhes · 7 conta · 8 anúncio · 9 contato
    ===================================================== */
 
+// Limpa os dados da sessão não persistente ao abrir uma nova sessão/aba.
+try { if(localStorage.getItem('adotae_lembrar')!=='true' && sessionStorage.getItem('adotae_sessao_ativa')!=='true') ['adotae_sessao','adotae_usuario','adotae_usuario_logado','adotae_boas_vindas'].forEach(k=>localStorage.removeItem(k)); } catch(e){}
+
 /* ---------- 1. UTILITÁRIOS ---------- */
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
